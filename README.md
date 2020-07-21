@@ -13,7 +13,14 @@ Create a Discord instance
 ```python
 from discord import Discord
 from discord.enum import CreateFlags
+import time
+
 app = Discord(APPLICATION_ID, CreateFlags.Default)
+
+# Don't forget to call RunCallbacks
+while 1:
+    time.sleep(1/10)
+    app.RunCallbacks()
 ```
 
 Get current user
@@ -21,6 +28,8 @@ Get current user
 ```python
 from discord import Discord
 from discord.enum import CreateFlags
+import time
+
 app = Discord(APPLICATION_ID, CreateFlags.Default)
 
 userManager = app.GetUserManager()
@@ -29,13 +38,22 @@ def onCurrUserUpdate():
     print(f"Current user : {user.Username}#{user.Discriminator}")
     
 userManager.OnCurrentUserUpdate = onCurrUserUpdate
+
+# Don't forget to call RunCallbacks
+while 1:
+    time.sleep(1/10)
+    app.RunCallbacks()
 ```
 
 Set activity
 
 ```python
+from discord import Discord
 from discord.model import Activity
-from discord.enum import Result
+from discord.enum import Result, CreateFlags
+import time
+
+app = Discord(APPLICATION_ID, CreateFlags.Default)
 
 activityManager = app.GetActivityManager()
 
@@ -53,6 +71,11 @@ def callback(result):
         raise Exception(result)
         
 activityManager.UpdateActivity(activity, callback)
+
+# Don't forget to call RunCallbacks
+while 1:
+    time.sleep(1/10)
+    app.RunCallbacks()
 ```
 
 ## To do
