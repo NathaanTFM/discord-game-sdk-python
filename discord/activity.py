@@ -79,10 +79,10 @@ class ActivityManager:
             self._garbage.remove(CCallback)
             callback(result)
             
-        CCallback = self._internal.send_invite.argtypes[-1](CCallback)
+        CCallback = self._internal.accept_invite.argtypes[-1](CCallback)
         self._garbage.append(CCallback) # prevent it from being garbage collected
         
-        self._internal.send_invite(self._internal, userId, ctypes.c_void_p(), CCallback)
+        self._internal.accept_invite(self._internal, userId, ctypes.c_void_p(), CCallback)
         
     def OnActivityJoin(self, joinSecret):
         pass
