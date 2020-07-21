@@ -1,4 +1,7 @@
-# WARNING: THIS IS A WORK-IN-PROGRESS. DO NOT USE IT EXCEPT FOR TESTING PURPOSES.
+# WARNING: THIS IS A WORK-IN-PROGRESS
+
+Please do not use it, except for testing purposes.
+
 ---
 
 # Discord Game SDK for Python
