@@ -24,8 +24,6 @@ class RelationshipManager:
             return bool(filter(Relationship(internal = relationship.contents)))
             
         CFilter = self._internal.filter.argtypes[-1](CFilter)
-        self._garbage.append(CFilter) # prevent it from being garbage collected
-        # TODO: eventually remove it
         
         self._internal.filter(self._internal, ctypes.c_void_p(), CFilter)
         
@@ -46,7 +44,7 @@ class RelationshipManager:
         return Relationship(internal = pointer)
     
     def Count(self):
-        count = ctypes.c_uint32()
+        count = ctypes.c_int32()
         result = self._internal.count(self._internal, count)
         if result != Result.Ok:
             raise Exception(result)
