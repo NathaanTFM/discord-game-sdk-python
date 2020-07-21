@@ -44,7 +44,7 @@ class Result:
     PurchaseError = 42
     TransactionAborted = 43
     DrawingInitFailed = 44
-
+    
 class LogLevel:
     Error = 0
     Warning = 1
@@ -54,6 +54,18 @@ class LogLevel:
 class CreateFlags:
     Default = 0
     NoRequireDiscord = 1
+
+class UserFlag:
+    Partner = 2
+    HypeSquadEvents = 4
+    HypeSquadHouse1 = 64
+    HypeSquadHouse2 = 128
+    HypeSquadHouse3 = 256
+    
+class PremiumType:
+    None_ = 0
+    Tier1 = 1
+    Tier2 = 2
     
 class ActivityType:
     Playing = 0

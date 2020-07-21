@@ -88,14 +88,14 @@ while 1:
 
 * **This code is a mess:** it need comments, type hinting, some cleaning
 * **discord/sdk.py** isn't complete yet *(look for TODOs)*
-* **LobbyManager:** some functions are missing and some aren't tested
-* **ActivityManager:** should be working but further testing would be appreciated
-* **ApplicationManager:** should be working but further testing would be appreciated (especially for the functions GetTicket and ValidateOrExit)
+* **ActivityManager:** should be working
 * **RelationshipManager:** should be working
 * **ImageManager:** should be working
-* **UserManager:** GetCurrentUserPremiumType and CurrentUserHasFlag are not implemented
-* **AchievementManager:** everything is missing
+* **UserManager:** should be working
+* **ApplicationManager:** should be working but further testing would be appreciated (especially for the functions GetTicket and ValidateOrExit)
+* **LobbyManager:** some functions are missing and some aren't tested
 * **NetworkManager:** (almost) everything is missing
+* **AchievementManager:** everything is missing
 * **OverlayManager:** everything is missing
 * **StorageManager:** everything is missing
 * **StoreManager:** everything is missing
