@@ -11,14 +11,7 @@ import time, random
 # we get the application id from a file
 with open("application_id.txt", "r") as file:
     applicationId = int(file.read())
-
-# debug callback
-def debugCallback(debug, result, *args):
-    if result == Result.Ok:
-        print(debug, "success")
-    else:
-        print(debug, "failure", result, args)
-        
+    
 # we create the discord instance
 app = Discord(applicationId,  CreateFlags.Default)
 relationshipManager = app.GetRelationshipManager()
