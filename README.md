@@ -1,3 +1,6 @@
+# WARNING: THIS IS A WORK-IN-PROGRESS. DO NOT USE IT EXCEPT FOR TESTING PURPOSES.
+---
+
 # Discord Game SDK for Python
 
 This is **not** a module. This was made for **Python >= 3.7**
