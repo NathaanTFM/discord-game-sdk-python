@@ -119,7 +119,7 @@ class DiscordLobby(Structure):
         ("locked", c_bool)
     ]
     
-class DiscordImeUnderline(Structure):
+"""class DiscordImeUnderline(Structure):
     _fields_ = [
         ("from", c_int32),
         ("to", c_int32),
@@ -134,7 +134,7 @@ class DiscordRect(Structure):
         ("top", c_int32),
         ("right", c_int32),
         ("bottom", c_int32)
-    ]
+    ]"""
     
 class DiscordFileStat(Structure):
     _fields_ = [
