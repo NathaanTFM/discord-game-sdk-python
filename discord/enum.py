@@ -43,7 +43,7 @@ class Result:
     InvalidGiftCode = 41
     PurchaseError = 42
     TransactionAborted = 43
-    DrawingInitFailed = 44
+    #DrawingInitFailed = 44
     
 class LogLevel:
     Error = 0
