@@ -6,11 +6,16 @@ Please do not use it, except for testing purposes.
 
 # Discord Game SDK for Python
 
-This is **not** a module. This was made for **Python >= 3.7**
+This is **not** a module. This was made for **Python >= 3.7** and **Discord Game SDK 2.5.8**
 
 ## Usage
 
-Download it, unpack it, import it. Don't forget to add `discord_game_sdk.dll`. I don't know if I can redistribute it in that repo, and I don't know if it's backwards compatible, so here's the SHA1 hash: `a62307af643881ca7de75d3d49b09fc776eac42e`
+- Download:
+  - [Discord Game SDK (2.5.8)](https://dl-game-sdk.discordapp.net/2.5.8/discord_game_sdk.zip)
+  - [Discord Game SDK for Python](https://github.com/NathaanTFM/discord-game-sdk-python/archive/master.zip)
+
+- Grab the DLL from `discord_game_sdk.zip` in the `lib` directory and put it in your project directory
+- Grab the `discord` directory from `master.zip` and put it in your project directory
 
 ## Examples
 
