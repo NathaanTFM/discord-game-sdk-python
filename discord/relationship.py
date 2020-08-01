@@ -17,11 +17,11 @@ class RelationshipManager:
         self.OnRefresh()
         
     def _OnRelationshipUpdate(self, event_data, relationship):
-        self.OnRelationshipUpdate(Relationship(internal = relationship.contents))
+        self.OnRelationshipUpdate(Relationship(copy = relationship.contents))
         
     def Filter(self, filter):
         def CFilter(filter_data, relationship):
-            return bool(filter(Relationship(internal = relationship.contents)))
+            return bool(filter(Relationship(copy = relationship.contents)))
             
         CFilter = self._internal.filter.argtypes[-1](CFilter)
         

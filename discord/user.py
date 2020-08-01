@@ -27,7 +27,7 @@ class UserManager:
         def CCallback(callback_data, result, user):
             self._garbage.remove(CCallback)
             if result == Result.Ok:
-                callback(result, User(internal = user.contents))
+                callback(result, User(copy = user.contents))
             else:
                 callback(result, None)
                 

@@ -1,8 +1,12 @@
 from . import sdk
+import ctypes
 
 class Model:
     def __init__(self, **kwargs):
         self._internal = kwargs.get("internal", self._struct_())
+        if "copy" in kwargs:
+            ctypes.memmove(ctypes.byref(self._internal), ctypes.byref(kwargs["copy"]), ctypes.sizeof(self._struct_))
+            
         self._fields = {}
         
         for name, field, ftype in self._fields_:

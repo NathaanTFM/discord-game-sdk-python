@@ -317,7 +317,7 @@ IDiscordLobbyManager._fields_ = [
     ("get_member_user_id", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), DiscordLobbyId, c_int32, POINTER(DiscordUserId))),
     ("get_member_user", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), DiscordLobbyId, DiscordUserId, POINTER(DiscordUser))),
     ("get_member_metadata_value", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), DiscordLobbyId, DiscordUserId, DiscordMetadataKey, POINTER(DiscordMetadataValue))),
-    ("get_member_metadata_key", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), DiscordLobbyId, DiscordUserId, POINTER(c_int32), POINTER(DiscordMetadataKey))),
+    ("get_member_metadata_key", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), DiscordLobbyId, DiscordUserId, c_int32, POINTER(DiscordMetadataKey))),
     ("member_metadata_count", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), DiscordLobbyId, DiscordUserId, POINTER(c_int32))),
     ("update_member", CFUNCTYPE(None, POINTER(IDiscordLobbyManager), DiscordLobbyId, DiscordUserId, POINTER(IDiscordLobbyMemberTransaction), c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
     ("send_lobby_message", CFUNCTYPE(None, POINTER(IDiscordLobbyManager), DiscordLobbyId, POINTER(c_uint8), c_uint32, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
@@ -360,12 +360,35 @@ class IDiscordOverlayEvents(Structure):
     ]
     
 class IDiscordOverlayManager(Structure):
-    pass # TODO
+    pass
+    
+IDiscordOverlayManager._fields_ = [
+    ("is_enabled", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), POINTER(c_bool))),
+    ("is_locked", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), POINTER(c_bool))),
+    ("set_locked", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_bool, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
+    ("open_activity_invite", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_int32, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
+    ("open_guild_invite", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_char_p, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
+    ("open_voice_settings", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_void_p, CFUNCTYPE(None, c_void_p, c_int32)))
+]
 
 IDiscordStorageEvents = c_void_p
     
 class IDiscordStorageManager(Structure):
-    pass # TODO
+    pass
+    
+IDiscordStorageManager._fields_ = [
+    ("read", CFUNCTYPE(c_int32, POINTER(IDiscordStorageManager), c_char_p, POINTER(c_uint8), c_uint32, POINTER(c_uint32))),
+    ("read_async", CFUNCTYPE(None, POINTER(IDiscordStorageManager), c_char_p, c_void_p, CFUNCTYPE(None, c_void_p, c_int32, POINTER(c_uint8), c_uint32))),
+    ("read_async_partial", CFUNCTYPE(None, POINTER(IDiscordStorageManager), c_char_p, c_uint64, c_uint64, c_void_p, CFUNCTYPE(None, c_void_p, c_int32, POINTER(c_uint8), c_uint32))),
+    ("write", CFUNCTYPE(c_int32, POINTER(IDiscordStorageManager), c_char_p, POINTER(c_uint8), c_uint32)),
+    ("write_async", CFUNCTYPE(None, POINTER(IDiscordStorageManager), c_char_p, POINTER(c_uint8), c_uint32, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
+    ("delete_", CFUNCTYPE(c_int32, POINTER(IDiscordStorageManager), c_char_p)),
+    ("exists", CFUNCTYPE(c_int32, POINTER(IDiscordStorageManager), c_char_p, POINTER(c_bool))),
+    ("count", CFUNCTYPE(None, POINTER(IDiscordStorageManager), POINTER(c_int32))),
+    ("stat", CFUNCTYPE(c_int32, POINTER(IDiscordStorageManager), c_char_p, POINTER(DiscordFileStat))),
+    ("stat_at", CFUNCTYPE(c_int32, POINTER(IDiscordStorageManager), c_int32, POINTER(DiscordFileStat))),
+    ("get_path", CFUNCTYPE(c_int32, POINTER(IDiscordStorageManager), POINTER(DiscordPath)))
+]
 
 class IDiscordStoreEvents(Structure):
     _fields_ = [
