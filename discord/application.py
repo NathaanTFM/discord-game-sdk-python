@@ -30,7 +30,7 @@ class ApplicationManager:
         def CCallback(callback_data, result, oauth2_token):
             self._garbage.remove(CCallback)
             if result == Result.Ok:
-                callback(result, OAuth2Token(internal = oauth2_token.contents))
+                callback(result, OAuth2Token(copy = oauth2_token.contents))
             else:
                 callback(result, None)
             

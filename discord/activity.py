@@ -21,10 +21,10 @@ class ActivityManager:
         self.OnActivitySpectate(secret.decode("utf8"))
         
     def _OnActivityJoinRequest(self, event_data, user):
-        self.OnActivityJoinRequest(User(internal = user.contents))
+        self.OnActivityJoinRequest(User(copy = user.contents))
         
     def _OnActivityInvite(self, event_data, type, user, activity):
-        self.OnActivityInvite(type, User(internal = user.contents), Activity(internal = activity.contents))
+        self.OnActivityInvite(type, User(copy = user.contents), Activity(copy = activity.contents))
         
     def RegisterCommand(self, command):
         result = self._internal.register_command(self._internal, command.encode("utf8"))
