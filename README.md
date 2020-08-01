@@ -98,7 +98,7 @@ while 1:
 * **ImageManager:** should be working
 * **UserManager:** should be working
 * **ApplicationManager:** should be working but further testing would be appreciated (especially for the functions GetTicket and ValidateOrExit)
-* **LobbyManager:** some functions are missing and some aren't tested
+* **LobbyManager:** should be working but further testing would be appreciated
 * **NetworkManager:** (almost) everything is missing
 * **AchievementManager:** everything is missing
 * **OverlayManager:** everything is missing
