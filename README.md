@@ -1,6 +1,7 @@
 # Discord Game SDK for Python
 
 This is **not** a module. This was made for **Python >= 3.7** and **Discord Game SDK 2.5.6**
+
 This is a **Work In Progress:** it might not work as expected or not work at all. This was made for testing purposes.
 
 ## Usage
