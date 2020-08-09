@@ -18,6 +18,8 @@ import ctypes
     
 class Discord:
     def __init__(self, clientId: int, flags: CreateFlags):
+        self.core = None
+        
         self._activityManager = ActivityManager()
         self._relationshipManager = RelationshipManager()
         self._imageManager = ImageManager()
