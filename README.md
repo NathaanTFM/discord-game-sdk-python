@@ -1,4 +1,6 @@
 # WARNING: THIS IS A WORK-IN-PROGRESS
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FNathaanTFM%2Fdiscord-game-sdk-python.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FNathaanTFM%2Fdiscord-game-sdk-python?ref=badge_shield)
+
 
 Please do not use it, except for testing purposes.
 
@@ -105,3 +107,6 @@ while 1:
 * **StorageManager:** everything is missing
 * **StoreManager:** everything is missing
 * **VoiceManager:** everything is missing
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FNathaanTFM%2Fdiscord-game-sdk-python.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FNathaanTFM%2Fdiscord-game-sdk-python?ref=badge_large)
