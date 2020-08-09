@@ -1,7 +1,7 @@
 from ctypes import *
 import os.path
 
-dll = CDLL(os.path.abspath("discord_game_sdk.dll"))
+dll = CDLL(os.path.abspath("discord_game_sdk"))
 DiscordCreate = dll.DiscordCreate 
     
 DiscordClientId = c_int64
@@ -119,7 +119,9 @@ class DiscordLobby(Structure):
         ("locked", c_bool)
     ]
     
-"""class DiscordImeUnderline(Structure):
+# SDK VERSION 2.5.7+ STUFF
+"""
+class DiscordImeUnderline(Structure):
     _fields_ = [
         ("from", c_int32),
         ("to", c_int32),
@@ -134,8 +136,9 @@ class DiscordRect(Structure):
         ("top", c_int32),
         ("right", c_int32),
         ("bottom", c_int32)
-    ]"""
-    
+    ]
+"""
+
 class DiscordFileStat(Structure):
     _fields_ = [
         ("filename", c_char * 260),
@@ -397,7 +400,20 @@ class IDiscordStoreEvents(Structure):
     ]
     
 class IDiscordStoreManager(Structure):
-    pass # TODO
+    pass
+    
+IDiscordStoreManager._fields_ = [
+    ("fetch_skus", CFUNCTYPE(None, POINTER(IDiscordStoreManager), c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
+    ("count_skus", CFUNCTYPE(None, POINTER(IDiscordStoreManager), POINTER(c_int32))),
+    ("get_sku", CFUNCTYPE(c_int32, POINTER(IDiscordStoreManager), DiscordSnowflake, POINTER(DiscordSku))),
+    ("get_sku_at", CFUNCTYPE(c_int32, POINTER(IDiscordStoreManager), c_int32, POINTER(DiscordSku))),
+    ("fetch_entitlements", CFUNCTYPE(None, POINTER(IDiscordStoreManager), c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
+    ("count_entitlements", CFUNCTYPE(None, POINTER(IDiscordStoreManager), POINTER(c_int32))),
+    ("get_entitlement", CFUNCTYPE(c_int32, POINTER(IDiscordStoreManager), DiscordSnowflake, POINTER(DiscordEntitlement))),
+    ("get_entitlement_at", CFUNCTYPE(c_int32, POINTER(IDiscordStoreManager), c_int32, POINTER(DiscordEntitlement))),
+    ("has_sku_entitlement", CFUNCTYPE(c_int32, POINTER(IDiscordStoreManager), DiscordSnowflake, POINTER(c_bool))),
+    ("start_purchase", CFUNCTYPE(None, POINTER(IDiscordStoreManager), DiscordSnowflake, c_void_p, CFUNCTYPE(None, c_void_p, c_int32)))
+]
 
 class IDiscordVoiceEvents(Structure):
     _fields_ = [
@@ -426,7 +442,15 @@ class IDiscordAchievementEvents(Structure):
     ]
     
 class IDiscordAchievementManager(Structure):
-    pass # TODO
+    pass
+    
+IDiscordAchievementManager._fields_ = [
+    ("set_user_achievement", CFUNCTYPE(None, POINTER(IDiscordAchievementManager), DiscordSnowflake, c_uint8, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
+    ("fetch_user_achievements", CFUNCTYPE(None, POINTER(IDiscordAchievementManager), c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
+    ("count_user_achievements", CFUNCTYPE(None, POINTER(IDiscordAchievementManager), POINTER(c_int32))),
+    ("get_user_achievement", CFUNCTYPE(c_int32, POINTER(IDiscordAchievementManager), DiscordSnowflake, POINTER(DiscordUserAchievement))),
+    ("get_user_achievement_at", CFUNCTYPE(c_int32, POINTER(IDiscordAchievementManager), c_int32, POINTER(DiscordUserAchievement)))
+]
 
 IDiscordCoreEvents = c_void_p
     
