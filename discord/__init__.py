@@ -66,6 +66,7 @@ class Discord:
     def __del__(self):
         if self.core:
             self.core.destroy(self.core)
+            self.core = None
         
     def SetLogHook(self, min_level: LogLevel, hook: Callable) -> None:
         """

@@ -356,9 +356,6 @@ class LobbyManager:
         Returns the key for the lobby metadata at the given index.
         """
         metadataKey = sdk.DiscordMetadataKey()
-        metadataKey.value = key.encode("utf8")
-        
-        metadataValue = sdk.DiscordMetadataValue()
         
         result = self._internal.get_lobby_metadata_key(self._internal, lobbyId, index, metadataKey)
         if result != Result.Ok:
@@ -434,9 +431,6 @@ class LobbyManager:
         Gets the key for the lobby metadata at the given index on a lobby member.
         """
         metadataKey = sdk.DiscordMetadataKey()
-        metadataKey.value = key.encode("utf8")
-        
-        metadataValue = sdk.DiscordMetadataValue()
         
         result = self._internal.get_member_metadata_key(self._internal, lobbyId, userId, index, metadataKey)
         if result != Result.Ok:
