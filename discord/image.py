@@ -1,6 +1,7 @@
 from . import sdk
 from .model import ImageDimensions, ImageHandle
 from .enum import Result
+from typing import Callable
 import ctypes
 
 class ImageManager:
@@ -9,7 +10,12 @@ class ImageManager:
         self._garbage = []
         self._events = None
         
-    def Fetch(self, handle, refresh, callback):
+    def Fetch(self, handle: ImageHandle, refresh: bool, callback: Callable) -> None:
+        """
+        Prepares an image to later retrieve data about it.
+        
+        Returns discord.enum.Result (int) and ImageHandle via callback.
+        """
         def CCallback(callback_data, result, handle):
             self._garbage.remove(CCallback)
             if result == Result.Ok:
@@ -22,7 +28,10 @@ class ImageManager:
         
         self._internal.fetch(self._internal, handle._internal, refresh, ctypes.c_void_p(), CCallback)
         
-    def GetDimensions(self, handle):
+    def GetDimensions(self, handle: ImageHandle) -> ImageDimensions:
+        """
+        Gets the dimension for the given user's avatar's source image
+        """
         dimensions = sdk.DiscordImageDimensions()
         result = self._internal.get_dimensions(self._internal, handle._internal, dimensions)
         if result != Result.Ok:
@@ -30,7 +39,10 @@ class ImageManager:
             
         return ImageDimensions(internal = dimensions)
         
-    def GetData(self, handle):
+    def GetData(self, handle: ImageHandle) -> bytes:
+        """
+        Gets the image data for a given user's avatar.
+        """
         dimensions = self.GetDimensions(handle)
         buffer = (ctypes.c_uint8 * (dimensions.Width * dimensions.Height * 4))()
         
