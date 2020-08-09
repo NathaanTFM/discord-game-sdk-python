@@ -2,6 +2,7 @@ from . import sdk
 from .model import Lobby, User
 from .enum import Result, LobbyType, LobbySearchComparison, LobbySearchCast, LobbySearchDistance
 from .event import bindEvents
+from .exception import getException
 from typing import Callable
 import ctypes
 
@@ -15,7 +16,7 @@ class LobbyTransaction:
         """
         result = self._internal.set_type(self._internal, type)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
     def SetOwner(self, userId: int) -> None:
         """
@@ -23,7 +24,7 @@ class LobbyTransaction:
         """
         result = self._internal.set_owner(self._internal, userId)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
         
     def SetCapacity(self, capacity: int) -> None:
         """
@@ -31,7 +32,7 @@ class LobbyTransaction:
         """
         result = self._internal.set_capacity(self._internal, capacity)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
         
     def SetMetadata(self, key: str, value: str) -> None:
         """
@@ -45,7 +46,7 @@ class LobbyTransaction:
         
         result = self._internal.set_metadata(self._internal, metadataKey, metadataValue)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
     
     def DeleteMetadata(self, key: str) -> None:
         """
@@ -56,7 +57,7 @@ class LobbyTransaction:
             
         result = self._internal.delete_metadata(self._internal, metadataKey)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
     
     def SetLocked(self, locked: bool) -> None:
         """
@@ -64,7 +65,7 @@ class LobbyTransaction:
         """
         result = self._internal.set_locked(self._internal, locked)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
     
 class LobbyMemberTransaction:
     def __init__(self, internal):
@@ -82,7 +83,7 @@ class LobbyMemberTransaction:
         
         result = self._internal.set_metadata(self._internal, metadataKey, metadataValue)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
     
     def DeleteMetadata(self, key: str) -> None:
         """
@@ -93,7 +94,7 @@ class LobbyMemberTransaction:
         
         result = self._internal.delete_metadata(self._internal, metadataKey)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
     
 class LobbySearchQuery:
     def __init__(self, internal):
@@ -111,7 +112,7 @@ class LobbySearchQuery:
         
         result = self._internal.filter(self._internal, metadataKey, comp, cast, metadataValue)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
     
     def Sort(self, key: str, cast: LobbySearchCast, value: str) -> None:
         """
@@ -125,7 +126,7 @@ class LobbySearchQuery:
         
         result = self._internal.sort(self._internal, metadataKey, cast, metadataValue)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
     
     def Limit(self, limit: int) -> None:
         """
@@ -133,7 +134,7 @@ class LobbySearchQuery:
         """
         result = self._internal.limit(self._internal, limit)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
     
     def Distance(self, distance: int) -> None:
         """
@@ -141,7 +142,7 @@ class LobbySearchQuery:
         """
         result = self._internal.distance(self._internal, distance)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
     
 class LobbyManager:
     def __init__(self):
@@ -191,7 +192,7 @@ class LobbyManager:
         transaction = ctypes.POINTER(sdk.IDiscordLobbyTransaction)()
         result = self._internal.get_lobby_create_transaction(self._internal, transaction)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return LobbyTransaction(internal = transaction.contents)
         
@@ -202,7 +203,7 @@ class LobbyManager:
         transaction = ctypes.POINTER(sdk.IDiscordLobbyTransaction)()
         result = self._internal.get_lobby_update_transaction(self._internal, lobbyId, transaction)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return LobbyTransaction(internal = transaction.contents)
         
@@ -213,7 +214,7 @@ class LobbyManager:
         transaction = ctypes.POINTER(sdk.IDiscordLobbyMemberTransaction)()
         result = self._internal.get_member_update_transaction(self._internal, lobbyId, userId, transaction)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return LobbyMemberTransaction(internal = transaction.contents)
         
@@ -307,7 +308,7 @@ class LobbyManager:
         
         result = self._internal.get_lobby_activity_secret(self._internal, lobbyId, lobbySecret)
         if result != result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return lobbySecret.value.decode("utf8")
         
@@ -334,7 +335,7 @@ class LobbyManager:
         
         result = self._internal.get_lobby(self._internal, lobbyId, lobby)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return Lobby(internal = lobby)
         
@@ -346,7 +347,7 @@ class LobbyManager:
         
         result = self._internal.lobby_metadata_count(self._internal, lobbyId, count)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return count.value
         
@@ -361,7 +362,7 @@ class LobbyManager:
         
         result = self._internal.get_lobby_metadata_key(self._internal, lobbyId, index, metadataKey)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return metadataKey.value.decode("utf8")
         
@@ -376,7 +377,7 @@ class LobbyManager:
         
         result = self._internal.get_lobby_metadata_value(self._internal, lobbyId, metadataKey, metadataValue)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return metadataValue.value.decode("utf8")
         
@@ -388,7 +389,7 @@ class LobbyManager:
         
         result = self._internal.member_count(self._internal, lobbyId, count)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return count.value
         
@@ -400,7 +401,7 @@ class LobbyManager:
         
         result = self._internal.get_member_user_id(self._internal, lobbyId, index, userId)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return userId.value
         
@@ -412,7 +413,7 @@ class LobbyManager:
         
         result = self._internal.get_member_user(self._internal, lobbyId, userId, user)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return User(internal = user)
         
@@ -424,7 +425,7 @@ class LobbyManager:
         
         result = self._internal.member_metadata_count(self._internal, lobbyId, userId, count)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return count.value
         
@@ -439,7 +440,7 @@ class LobbyManager:
         
         result = self._internal.get_member_metadata_key(self._internal, lobbyId, userId, index, metadataKey)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return metadataKey.value.decode("utf8")
         
@@ -454,7 +455,7 @@ class LobbyManager:
         
         result = self._internal.get_member_metadata_value(self._internal, lobbyId, userId, metadataKey, metadataValue)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return metadataValue.value.decode("utf8")
         
@@ -497,7 +498,7 @@ class LobbyManager:
         search_query = (ctypes.POINTER(sdk.IDiscordLobbySearchQuery))()
         result = self._internal.get_search_query(self._internal, ctypes.byref(search_query))
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return LobbySearchQuery(internal = search_query.contents)
         
@@ -535,7 +536,7 @@ class LobbyManager:
         
         result = self._internal.get_lobby_id(self._internal, index, lobbyId)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return lobbyId.value
         
@@ -617,7 +618,7 @@ class LobbyManager:
         """
         result = self._internal.connect_network(self._internal, lobbyId)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
         
     def DisconnectNetwork(self, lobbyId: int) -> None:
         """
@@ -625,7 +626,7 @@ class LobbyManager:
         """
         result = self._internal.disconnect_network(self._internal, lobbyId)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
     def FlushNetwork(self) -> None:
         """
@@ -633,7 +634,7 @@ class LobbyManager:
         """
         result = self._internal.flush_network(self._internal)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
     def OpenNetworkChannel(self, lobbyId: int, channelId: int, reliable: bool) -> None:
         """
@@ -641,7 +642,7 @@ class LobbyManager:
         """
         result = self._internal.open_network_channel(self._internal, lobbyId, channelId, reliable)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
     def SendNetworkMessage(self, lobbyId: int, userId: int, channelId: int, data: bytes) -> None:
         """
@@ -650,7 +651,7 @@ class LobbyManager:
         data = (ctypes.c_uint8 * len(data))(*data)
         result = self._internal.send_network_message(self._internal, lobbyId, userId, channelId, data, len(data))
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
     def OnNetworkMessage(self, lobbyId: int, userId: int, channelId: int, data: bytes) -> None:
         """

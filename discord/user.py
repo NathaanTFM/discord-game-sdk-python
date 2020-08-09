@@ -2,6 +2,7 @@ from . import sdk
 from .model import User
 from .enum import Result, PremiumType, UserFlag
 from .event import bindEvents
+from .exception import getException
 from typing import Callable
 import ctypes
 
@@ -23,7 +24,7 @@ class UserManager:
         user = sdk.DiscordUser()
         result = self._internal.get_current_user(self._internal, user)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return User(internal = user)
         
@@ -52,7 +53,7 @@ class UserManager:
         premiumType = ctypes.c_int32()
         result = self._internal.get_current_user_premium_type(self._internal, premiumType)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return premiumType.value
         
@@ -63,7 +64,7 @@ class UserManager:
         hasFlag = ctypes.c_bool()
         result = self._internal.current_user_has_flag(self._internal, flag, hasFlag)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return hasFlag.value
         
