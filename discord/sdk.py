@@ -301,7 +301,7 @@ class IDiscordLobbyManager(Structure):
 IDiscordLobbyManager._fields_ = [
     ("get_lobby_create_transaction", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), POINTER(POINTER(IDiscordLobbyTransaction)))),
     ("get_lobby_update_transaction", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), DiscordLobbyId, POINTER(POINTER(IDiscordLobbyTransaction)))),
-    ("get_member_update_transaction", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), DiscordLobbyId, DiscordUserId, POINTER(POINTER(IDiscordLobbyTransaction)))),
+    ("get_member_update_transaction", CFUNCTYPE(c_int32, POINTER(IDiscordLobbyManager), DiscordLobbyId, DiscordUserId, POINTER(POINTER(IDiscordLobbyMemberTransaction)))),
     ("create_lobby", CFUNCTYPE(None, POINTER(IDiscordLobbyManager), POINTER(IDiscordLobbyTransaction), c_void_p, CFUNCTYPE(None, c_void_p, c_int32, POINTER(DiscordLobby)))),
     ("update_lobby", CFUNCTYPE(None, POINTER(IDiscordLobbyManager), DiscordLobbyId, POINTER(IDiscordLobbyTransaction), c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
     ("delete_lobby", CFUNCTYPE(None, POINTER(IDiscordLobbyManager), DiscordLobbyId, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),

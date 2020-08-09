@@ -1,6 +1,7 @@
 from . import sdk
 from .model import ImageDimensions, ImageHandle
 from .enum import Result
+from .exception import getException
 from typing import Callable
 import ctypes
 
@@ -35,7 +36,7 @@ class ImageManager:
         dimensions = sdk.DiscordImageDimensions()
         result = self._internal.get_dimensions(self._internal, handle._internal, dimensions)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return ImageDimensions(internal = dimensions)
         
@@ -48,3 +49,4 @@ class ImageManager:
         
         self._internal.get_data(self._internal, handle._internal, buffer, buffer._length_)
         return bytes(buffer)
+        

@@ -2,6 +2,7 @@ from . import sdk
 from .model import User, Relationship
 from .enum import Result, RelationshipType, Status
 from .event import bindEvents
+from .exception import getException
 from typing import Callable
 import ctypes
 
@@ -38,7 +39,7 @@ class RelationshipManager:
         pointer = sdk.DiscordRelationship()
         result = self._internal.get(self._internal, userId, pointer)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return Relationship(internal = pointer)
     
@@ -49,7 +50,7 @@ class RelationshipManager:
         pointer = sdk.DiscordRelationship()
         result = self._internal.get_at(self._internal, index, pointer)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
             
         return Relationship(internal = pointer)
     
@@ -60,7 +61,7 @@ class RelationshipManager:
         count = ctypes.c_int32()
         result = self._internal.count(self._internal, count)
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
         
         return count.value
             

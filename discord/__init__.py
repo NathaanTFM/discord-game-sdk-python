@@ -11,11 +11,13 @@ from .storage import StorageManager
 from .store import StoreManager
 from .voice import VoiceManager
 from .achievement import AchievementManager
-from .enum import Result
+from .enum import Result, LogLevel, CreateFlags
+from .exception import getException
+from typing import Callable
 import ctypes
     
 class Discord:
-    def __init__(self, clientId, flags):
+    def __init__(self, clientId: int, flags: CreateFlags):
         self._activityManager = ActivityManager()
         self._relationshipManager = RelationshipManager()
         self._imageManager = ImageManager()
@@ -51,21 +53,22 @@ class Discord:
         params.voice_events = self._voiceManager._events
         params.achievement_events = self._achievementManager._events
         
-        ptr = (ctypes.POINTER(sdk.IDiscordCore))()
+        pointer = ctypes.POINTER(sdk.IDiscordCore)()
         
-        self.core = None
-        
-        result = sdk.DiscordCreate(version, params, ctypes.byref(ptr))
+        result = sdk.DiscordCreate(version, params, ctypes.pointer(pointer))
         if result != Result.Ok:
-            raise Exception(result)
+            raise getException(result)
         
-        self.core = ptr.contents
+        self.core = pointer.contents
         
     def __del__(self):
         if self.core:
             self.core.destroy(self.core)
         
-    def SetLogHook(self, min_level, hook):
+    def SetLogHook(self, min_level: LogLevel, hook: Callable) -> None:
+        """
+        Registers a logging callback function with the minimum level of message to receive.
+        """
         def CHook(hook_data, level, message):
             hook(level, message.decode("utf8"))
             
@@ -74,76 +77,117 @@ class Discord:
         
         self.core.set_log_hook(self.core, min_level, ctypes.c_void_p(), CHook)
         
-    def RunCallbacks(self):
-        return self.core.run_callbacks(self.core)
-        
-    def GetActivityManager(self):
+    def RunCallbacks(self) -> None:
+        """
+        Runs all pending SDK callbacks.
+        """
+        result = self.core.run_callbacks(self.core)
+        if result != Result.Ok:
+            raise getException(result)
+            
+    def GetActivityManager(self) -> ActivityManager:
+        """
+        Fetches an instance of the manager for interfacing with activies in the SDK.
+        """
         if not self._activityManager._internal:
             self._activityManager._internal = self.core.get_activity_manager(self.core).contents
         
         return self._activityManager
         
-    def GetRelationshipManager(self):
+    def GetRelationshipManager(self) -> RelationshipManager:
+        """
+        Fetches an instance of the manager for interfacing with relationships in the SDK.
+        """
         if not self._relationshipManager._internal:
             self._relationshipManager._internal = self.core.get_relationship_manager(self.core).contents
         
         return self._relationshipManager
         
-    def GetImageManager(self):
+    def GetImageManager(self) -> ImageManager:
+        """
+        Fetches an instance of the manager for interfacing with images in the SDK.
+        """
         if not self._imageManager._internal:
             self._imageManager._internal = self.core.get_image_manager(self.core).contents
         
         return self._imageManager
         
-    def GetUserManager(self):
+    def GetUserManager(self) -> UserManager:
+        """
+        Fetches an instance of the manager for interfacing with users in the SDK.
+        """
         if not self._userManager._internal:
             self._userManager._internal = self.core.get_user_manager(self.core).contents
         
         return self._userManager
         
-    def GetLobbyManager(self):
+    def GetLobbyManager(self) -> LobbyManager:
+        """
+        Fetches an instance of the manager for interfacing with lobbies in the SDK.
+        """
         if not self._lobbyManager._internal:
             self._lobbyManager._internal = self.core.get_lobby_manager(self.core).contents
         
         return self._lobbyManager
         
-    def GetNetworkManager(self):
+    def GetNetworkManager(self) -> NetworkManager:
+        """
+        Fetches an instance of the manager for interfacing with networking in the SDK.
+        """
         if not self._networkManager._internal:
             self._networkManager._internal = self.core.get_network_manager(self.core).contents
         
         return self._networkManager
         
-    def GetOverlayManager(self):
+    def GetOverlayManager(self) -> OverlayManager:
+        """
+        Fetches an instance of the manager for interfacing with the overlay in the SDK.
+        """
         if not self._overlayManager._internal:
             self._overlayManager._internal = self.core.get_overlay_manager(self.core).contents
         
         return self._overlayManager
         
-    def GetApplicationManager(self):
+    def GetApplicationManager(self) -> ApplicationManager:
+        """
+        Fetches an instance of the manager for interfacing with applications in the SDK.
+        """
         if not self._applicationManager._internal:
             self._applicationManager._internal = self.core.get_application_manager(self.core).contents
         
         return self._applicationManager
         
-    def GetStorageManager(self):
+    def GetStorageManager(self) -> StorageManager:
+        """
+        Fetches an instance of the manager for interfacing with storage in the SDK.
+        """
         if not self._storageManager._internal:
             self._storageManager._internal = self.core.get_storage_manager(self.core).contents
         
         return self._storageManager
         
-    def GetStoreManager(self):
+    def GetStoreManager(self) -> StoreManager:
+        """
+        Fetches an instance of the manager for interfacing with SKUs and Entitlements in the SDK.
+        """
         if not self._storeManager._internal:
             self._storeManager._internal = self.core.get_store_manager(self.core).contents
         
         return self._storeManager
         
-    def GetVoiceManager(self):
+    def GetVoiceManager(self) -> VoiceManager:
+        """
+        Fetches an instance of the manager for interfacing with voice chat in the SDK.
+        """
         if not self._voiceManager._internal:
             self._voiceManager._internal = self.core.get_voice_manager(self.core).contents
         
         return self._voiceManager
         
-    def GetAchievementManager(self):
+    def GetAchievementManager(self) -> AchievementManager:
+        """
+        Fetches an instance of the manager for interfacing with achievements in the SDK.
+        """
         if not self._achievementManager._internal:
             self._achievementManager._internal = self.core.get_achievement_manager(self.core).contents
         
