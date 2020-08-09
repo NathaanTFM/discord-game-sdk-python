@@ -19,6 +19,8 @@ This is **not** a module. This was made for **Python >= 3.7** and **Discord Game
 
 ## Examples
 
+You can find more examples in the `examples/` directory.
+
 Create a Discord instance
 
 ```python
@@ -99,9 +101,9 @@ while 1:
 * **UserManager:** should be working
 * **ApplicationManager:** should be working but further testing would be appreciated (especially for the functions GetTicket and ValidateOrExit)
 * **LobbyManager:** should be working but further testing would be appreciated
+* **VoiceManager:** should be working but further testing would be appreciated
 * **NetworkManager:** (almost) everything is missing
 * **AchievementManager:** everything is missing
 * **OverlayManager:** everything is missing
 * **StorageManager:** everything is missing
 * **StoreManager:** everything is missing
-* **VoiceManager:** everything is missing

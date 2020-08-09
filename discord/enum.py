@@ -120,3 +120,8 @@ class LobbySearchDistance:
     Default = 1
     Extended = 2
     Global = 3
+    
+class InputModeType:
+    VoiceActivity = 0
+    PushToTalk = 1
+    

@@ -162,3 +162,10 @@ class Lobby(Model):
         ("Capacity", "capacity", int),
         ("Locked", "locked", bool)
     ]
+    
+class InputMode(Model):
+    _struct_ = sdk.DiscordInputMode
+    _fields_ = [
+        ("Type", "type", int),
+        ("Shortcut", "shortcut", str)
+    ]
