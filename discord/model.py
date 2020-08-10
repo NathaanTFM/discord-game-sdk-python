@@ -169,3 +169,11 @@ class InputMode(Model):
         ("Type", "type", int),
         ("Shortcut", "shortcut", str)
     ]
+    
+class FileStat(Model):
+    _struct_ = sdk.DiscordFileStat
+    _fields_ = [
+        ("Filename", "filename", str),
+        ("Size", "size", int),
+        ("LastModified", "last_modified", int)
+    ]
