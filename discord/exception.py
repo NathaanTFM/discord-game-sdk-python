@@ -15,4 +15,4 @@ for name in dir(Result):
         exceptions[value] = exception
         
 def getException(result):
-    return exceptions[result]
+    return exceptions.get(result, DiscordException)("result " + str(result))
