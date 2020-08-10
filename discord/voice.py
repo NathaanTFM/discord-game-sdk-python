@@ -11,11 +11,11 @@ class VoiceManager:
         self._internal = None
         self._garbage = []
         self._events = bindEvents(sdk.IDiscordVoiceEvents,
-            self._OnCurrentUserUpdate
+            self._OnSettingsUpdate
         )
         
-    def _OnCurrentUserUpdate(self, event_data):
-        self.OnCurrentUserUpdate()
+    def _OnSettingsUpdate(self, event_data):
+        self.OnSettingsUpdate()
         
     def GetInputMode(self) -> InputMode:
         """
@@ -119,6 +119,6 @@ class VoiceManager:
         if result != Result.Ok:
             raise getException(result)
             
-    def OnCurrentUserUpdate(self) -> None:
+    def OnSettingsUpdate(self) -> None:
         # This event is not documented anywhere (yet?)
         pass
