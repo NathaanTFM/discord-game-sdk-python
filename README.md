@@ -30,7 +30,7 @@ If you need documentation, look at [**the official Game SDK docs**](https://disc
   * **ApplicationManager** (especially the functions `GetTicket` and `ValidateOrExit`)
   * **LobbyManager**
   * **NetworkManager**
-  * **VoiceManager** (not tested at all)
+  * **VoiceManager**
 
 * Not implemented, or not working:
   * **AchievementManager**
