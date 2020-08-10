@@ -433,7 +433,7 @@ IDiscordVoiceManager._fields_ = [
     ("is_local_mute", CFUNCTYPE(c_int32, POINTER(IDiscordVoiceManager), DiscordSnowflake, POINTER(c_bool))),
     ("set_local_mute", CFUNCTYPE(c_int32, POINTER(IDiscordVoiceManager), DiscordSnowflake, c_bool)),
     ("get_local_volume", CFUNCTYPE(c_int32, POINTER(IDiscordVoiceManager), DiscordSnowflake, POINTER(c_uint8))),
-    ("set_local_volume", CFUNCTYPE(c_int32, POINTER(IDiscordVoiceManager), DiscordSnowflake, POINTER(c_uint8)))
+    ("set_local_volume", CFUNCTYPE(c_int32, POINTER(IDiscordVoiceManager), DiscordSnowflake, c_uint8))
 ]
     
 class IDiscordAchievementEvents(Structure):
