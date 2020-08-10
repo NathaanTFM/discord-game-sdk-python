@@ -4,7 +4,7 @@ This is **not** a module. This was made for **Python >= 3.5** and **Discord Game
 
 This is a **Work In Progress:** it might not work as expected or not work at all. This was made for testing purposes.
 
-## Usage
+## Installation
 
 - Download:
   - [Discord Game SDK (2.5.6)](https://dl-game-sdk.discordapp.net/2.5.6/discord_game_sdk.zip)
@@ -13,9 +13,11 @@ This is a **Work In Progress:** it might not work as expected or not work at all
 - Grab the DLL from `discord_game_sdk.zip` in the `lib` directory and put it in your project directory
 - Grab the `discord` directory from `master.zip` and put it in your project directory
 
-## Contributing
+## Documentation
 
-The code needs **more comments, type hinting**. Feel free to open a **pull request**!
+If you need documentation, look at [**the official Game SDK docs**](https://discord.com/developers/docs/game-sdk/sdk-starter-guide) ; this was made following the official documentation.
+
+## Features
 
 * Should be working:
   * **ActivityManager**
@@ -34,6 +36,12 @@ The code needs **more comments, type hinting**. Feel free to open a **pull reque
   * **OverlayManager**
   * **StorageManager**
   * **StoreManager**
+
+## Contributing
+
+The code needs **more comments, type hinting**. You can also implement the **missing features**, or add **more tests**. Feel free to open a **pull request**!
+
+You can also **report issues**. Just open an issue and I will ll look into it!
 
 ## Examples
 
