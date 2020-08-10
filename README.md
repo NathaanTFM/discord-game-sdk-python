@@ -1,6 +1,6 @@
 # Discord Game SDK for Python
 
-This is **not** a module. This was made for **Python >= 3.7** and **Discord Game SDK 2.5.6**
+This is **not** a module. This was made for **Python >= 3.5** and **Discord Game SDK 2.5.6**
 
 This is a **Work In Progress:** it might not work as expected or not work at all. This was made for testing purposes.
 
@@ -12,6 +12,28 @@ This is a **Work In Progress:** it might not work as expected or not work at all
 
 - Grab the DLL from `discord_game_sdk.zip` in the `lib` directory and put it in your project directory
 - Grab the `discord` directory from `master.zip` and put it in your project directory
+
+## Contributing
+
+The code needs **more comments, type hinting**. Feel free to open a **pull request**!
+
+* Should be working:
+  * **ActivityManager**
+  * **RelationshipManager**
+  * **ImageManager**
+  * **UserManager** 
+
+* Should be working, but need more testing:
+  * **ApplicationManager** (especially the functions `GetTicket` and `ValidateOrExit`)
+  * **VoiceManager** (not tested at all)
+  * **LobbyManager**
+  * **NetworkManager**
+
+* Not implemented, or not working:
+  * **AchievementManager**
+  * **OverlayManager**
+  * **StorageManager**
+  * **StoreManager**
 
 ## Examples
 
@@ -86,20 +108,3 @@ while 1:
     time.sleep(1/10)
     app.RunCallbacks()
 ```
-
-## To do
-
-* **This code is a mess:** it need comments, type hinting, some cleaning
-* **discord/sdk.py** isn't complete yet *(look for TODOs)*
-* **ActivityManager:** should be working
-* **RelationshipManager:** should be working
-* **ImageManager:** should be working
-* **UserManager:** should be working
-* **ApplicationManager:** should be working but further testing would be appreciated (especially for the functions GetTicket and ValidateOrExit)
-* **LobbyManager:** should be working but further testing would be appreciated
-* **VoiceManager:** should be working but further testing would be appreciated
-* **NetworkManager:** (almost) everything is missing
-* **AchievementManager:** everything is missing
-* **OverlayManager:** everything is missing
-* **StorageManager:** everything is missing
-* **StoreManager:** everything is missing
