@@ -1,7 +1,6 @@
-# TODO
-
 class AchievementManager:
     def __init__(self):
+        self._internal = None
         self._events = None
         
     def SetUserAchievement(self, achievementId, percentComplete, callback):

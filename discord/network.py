@@ -7,7 +7,6 @@ import ctypes
 class NetworkManager:
     def __init__(self):
         self._internal = None
-        self._garbage = []
         self._events = bindEvents(sdk.IDiscordNetworkEvents,
             self._OnMessage,
             self._OnRouteUpdate
