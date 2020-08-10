@@ -56,7 +56,8 @@ class NetworkManager:
         """
         Updates the network connection to another Discord user.
         """
-        result = self._internal.update_peer(self._internal, peerId, route)
+        route_data = ctypes.create_string_buffer(route.encode("utf8"))
+        result = self._internal.update_peer(self._internal, peerId, route_datagit)
         if result != Result.Ok:
             raise getException(result)
         
