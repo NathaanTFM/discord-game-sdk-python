@@ -77,7 +77,7 @@ class DiscordActivityParty(Structure):
     
 class DiscordActivitySecrets(Structure):
     _fields_ = [
-        ("char", c_char * 128),
+        ("match", c_char * 128),
         ("join", c_char * 128),
         ("spectate", c_char * 128)
     ]
