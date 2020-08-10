@@ -47,6 +47,9 @@ class ImageManager:
         dimensions = self.GetDimensions(handle)
         buffer = (ctypes.c_uint8 * (dimensions.Width * dimensions.Height * 4))()
         
-        self._internal.get_data(self._internal, handle._internal, buffer, buffer._length_)
+        result = self._internal.get_data(self._internal, handle._internal, buffer, len(buffer))
+        if result != Result.Ok:
+            raise getException(result)
+            
         return bytes(buffer)
         
