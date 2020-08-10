@@ -41,7 +41,7 @@ If you need documentation, look at [**the official Game SDK docs**](https://disc
 
 The code needs **more comments, type hinting**. You can also implement the **missing features**, or add **more tests**. Feel free to open a **pull request**!
 
-You can also **report issues**. Just open an issue and I will ll look into it!
+You can also **report issues**. Just open an issue and I will look into it!
 
 ## Examples
 
