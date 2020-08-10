@@ -22,6 +22,7 @@ If you need documentation, look at [**the official Game SDK docs**](https://disc
 * Should be working:
   * **ActivityManager**
   * **ImageManager**
+  * **NetworkManager**
   * **RelationshipManager**
   * **StorageManager**
   * **UserManager** 
@@ -29,7 +30,6 @@ If you need documentation, look at [**the official Game SDK docs**](https://disc
 * Should be working, but need more testing:
   * **ApplicationManager** (especially the functions `GetTicket` and `ValidateOrExit`)
   * **LobbyManager**
-  * **NetworkManager**
   * **VoiceManager**
 
 * Not implemented, or not working:
