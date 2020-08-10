@@ -5,7 +5,6 @@ sys.path.insert(0, "..")
 # we can now import it
 from discord import Discord
 from discord.enum import CreateFlags, Result, PremiumType, UserFlag
-from discord.model import Activity
 import time, uuid
 
 # we get the application id from a file
