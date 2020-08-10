@@ -50,7 +50,10 @@ class Model:
                 setattr(self._internal, field[0], value._internal)
             else:
                 raise TypeError(field[1])
-            
+
+    def __dir__(self):
+        return super().__dir__() + list(self._fields.keys())
+        
 class User(Model):
     _struct_ = sdk.DiscordUser
     _fields_ = [
