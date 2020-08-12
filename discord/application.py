@@ -1,7 +1,7 @@
 from . import sdk
 from .model import OAuth2Token
 from .enum import Result
-from typing import Callable
+from typing import Callable, Optional
 import ctypes
 
 class SignedAppTicket:
@@ -33,7 +33,7 @@ class ApplicationManager:
         self._internal.get_current_branch(self._internal, branch)
         return branch.value.decode("utf8")
         
-    def GetOAuth2Token(self, callback: Callable) -> None:
+    def GetOAuth2Token(self, callback: Callable[[Result, Optional[OAuth2Token]], None]) -> None:
         """
         Retrieve an oauth2 bearer token for the current user.
         
@@ -51,7 +51,7 @@ class ApplicationManager:
         
         self._internal.get_oauth2_token(self._internal, ctypes.c_void_p(), CCallback)
         
-    def ValidateOrExit(self, callback: Callable) -> None:
+    def ValidateOrExit(self, callback: Callable[[Result], None]) -> None:
         """
         Checks if the current user has the entitlement to run this game.
         
@@ -66,7 +66,7 @@ class ApplicationManager:
         
         self._internal.validate_or_exit(self._internal, ctypes.c_void_p(), CCallback)
         
-    def GetTicket(self, callback: Callable) -> None:
+    def GetTicket(self, callback: Callable[[Result, Optional[str]], None]) -> None:
         """
         Get the signed app ticket for the current user.
         

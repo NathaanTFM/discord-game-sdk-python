@@ -22,13 +22,13 @@ class VoiceManager:
         Get the current voice input mode for the user
         """
         input_mode = sdk.DiscordInputMode()
-        result = self._internal.get_input_mode(self._internal, input_mode)
+        result = Result(self._internal.get_input_mode(self._internal, input_mode))
         if result != Result.Ok:
             raise getException(result)
             
         return InputMode(internal = input_mode)
         
-    def SetInputMode(self, inputMode: InputMode, callback: Callable) -> None:
+    def SetInputMode(self, inputMode: InputMode, callback: Callable[[Result], None]) -> None:
         """
         Sets a new voice input mode for the uesr.
         
@@ -36,6 +36,7 @@ class VoiceManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.set_input_mode.argtypes[-1](CCallback)
@@ -48,7 +49,7 @@ class VoiceManager:
         Whether the connected user is currently muted.
         """
         mute = ctypes.c_bool()
-        result = self._internal.is_self_mute(self._internal, mute)
+        result = Result(self._internal.is_self_mute(self._internal, mute))
         if result != Result.Ok:
             raise getException(result)
             
@@ -58,7 +59,7 @@ class VoiceManager:
         """
         Mutes or unmutes the currently connected user.
         """
-        result = self._internal.set_self_mute(self._internal, mute)
+        result = Result(self._internal.set_self_mute(self._internal, mute))
         if result != Result.Ok:
             raise getException(result)
         
@@ -67,7 +68,7 @@ class VoiceManager:
         Whether the connected user is currently deafened.
         """
         deaf = ctypes.c_bool()
-        result = self._internal.is_self_deaf(self._internal, deaf)
+        result = Result(self._internal.is_self_deaf(self._internal, deaf))
         if result != Result.Ok:
             raise getException(result)
             
@@ -77,7 +78,7 @@ class VoiceManager:
         """
         Deafens or undefeans the currently connected user.
         """
-        result = self._internal.set_self_deaf(self._internal, deaf)
+        result = Result(self._internal.set_self_deaf(self._internal, deaf))
         if result != Result.Ok:
             raise getException(result)
         
@@ -86,7 +87,7 @@ class VoiceManager:
         Whether the given user is currently muted by the connected user.
         """
         mute = ctypes.c_bool()
-        result = self._internal.is_local_mute(self._internal, userId, mute)
+        result = Result(self._internal.is_local_mute(self._internal, userId, mute))
         if result != Result.Ok:
             raise getException(result)
             
@@ -96,7 +97,7 @@ class VoiceManager:
         """
         Mutes or unmutes the given user for the currently connected user.
         """
-        result = self._internal.set_local_mute(self._internal, userId, mute)
+        result = Result(self._internal.set_local_mute(self._internal, userId, mute))
         if result != Result.Ok:
             raise getException(result)
         
@@ -105,7 +106,7 @@ class VoiceManager:
         Gets the local volume for a given user.
         """
         volume = ctypes.c_uint8()
-        result = self._internal.get_local_volume(self._internal, userId, volume)
+        result = Result(self._internal.get_local_volume(self._internal, userId, volume))
         if result != Result.Ok:
             raise getException(result)
             
@@ -115,7 +116,7 @@ class VoiceManager:
         """
         Sets the local volume for a given user. 
         """
-        result = self._internal.set_local_volume(self._internal, userId, volume)
+        result = Result(self._internal.set_local_volume(self._internal, userId, volume))
         if result != Result.Ok:
             raise getException(result)
             

@@ -31,7 +31,7 @@ class NetworkManager:
         """
         Flushes the network
         """
-        result = self._internal.flush(self._internal)
+        result = Result(self._internal.flush(self._internal))
         if result != Result.Ok:
             raise getException(result)
             
@@ -39,7 +39,7 @@ class NetworkManager:
         """
         Opens a channel to a user with their given peer ID on the given channel number.
         """
-        result = self._internal.open_channel(self._internal, peerId, channelId, reliable)
+        result = Result(self._internal.open_channel(self._internal, peerId, channelId, reliable))
         if result != Result.Ok:
             raise getException(result)
         
@@ -48,7 +48,7 @@ class NetworkManager:
         Opens a network connection to another Discord user.
         """
         route_data = ctypes.create_string_buffer(route.encode("utf8"))
-        result = self._internal.open_peer(self._internal, peerId, route_data)
+        result = Result(self._internal.open_peer(self._internal, peerId, route_data))
         if result != Result.Ok:
             raise getException(result)
         
@@ -57,7 +57,7 @@ class NetworkManager:
         Updates the network connection to another Discord user.
         """
         route_data = ctypes.create_string_buffer(route.encode("utf8"))
-        result = self._internal.update_peer(self._internal, peerId, route_datagit)
+        result = Result(self._internal.update_peer(self._internal, peerId, route_datagit))
         if result != Result.Ok:
             raise getException(result)
         
@@ -66,7 +66,7 @@ class NetworkManager:
         Sends data to a given peer ID through the given channel.
         """
         data = (ctypes.c_uint8 * len(data))(*data)
-        result = self._internal.send_message(self._internal, peerId, channelId, data, len(data))
+        result = Result(self._internal.send_message(self._internal, peerId, channelId, data, len(data)))
         if result != Result.Ok:
             raise getException(result)
         
@@ -74,7 +74,7 @@ class NetworkManager:
         """
         Close the connection to a given user by peerId on the given channel.
         """
-        result = self._internal.close_channel(self._internal, peerId, channelId)
+        result = Result(self._internal.close_channel(self._internal, peerId, channelId))
         if result != Result.Ok:
             raise getException(result)
         
@@ -82,7 +82,7 @@ class NetworkManager:
         """
         Disconnects the network session to another Discord user.
         """
-        result = self._internal.close_peer(self._internal, peerId)
+        result = Result(self._internal.close_peer(self._internal, peerId))
         if result != Result.Ok:
             raise getException(result)
         

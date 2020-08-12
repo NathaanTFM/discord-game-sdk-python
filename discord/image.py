@@ -2,7 +2,7 @@ from . import sdk
 from .model import ImageDimensions, ImageHandle
 from .enum import Result
 from .exception import getException
-from typing import Callable
+from typing import Callable, Optional
 import ctypes
 
 class ImageManager:
@@ -11,7 +11,7 @@ class ImageManager:
         self._garbage = []
         self._events = None
         
-    def Fetch(self, handle: ImageHandle, refresh: bool, callback: Callable) -> None:
+    def Fetch(self, handle: ImageHandle, refresh: bool, callback: Callable[[Result, Optional[ImageHandle]], None]) -> None:
         """
         Prepares an image to later retrieve data about it.
         
@@ -19,6 +19,7 @@ class ImageManager:
         """
         def CCallback(callback_data, result, handle):
             self._garbage.remove(CCallback)
+            result = Result(result)
             if result == Result.Ok:
                 callback(result, ImageHandle(internal = handle))
             else:
@@ -34,7 +35,7 @@ class ImageManager:
         Gets the dimension for the given user's avatar's source image
         """
         dimensions = sdk.DiscordImageDimensions()
-        result = self._internal.get_dimensions(self._internal, handle._internal, dimensions)
+        result = Result(self._internal.get_dimensions(self._internal, handle._internal, dimensions))
         if result != Result.Ok:
             raise getException(result)
             
@@ -47,7 +48,7 @@ class ImageManager:
         dimensions = self.GetDimensions(handle)
         buffer = (ctypes.c_uint8 * (dimensions.Width * dimensions.Height * 4))()
         
-        result = self._internal.get_data(self._internal, handle._internal, buffer, len(buffer))
+        result = Result(self._internal.get_data(self._internal, handle._internal, buffer, len(buffer)))
         if result != Result.Ok:
             raise getException(result)
             

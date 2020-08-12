@@ -1,4 +1,6 @@
-class Result:
+from enum import IntEnum, IntFlag
+
+class Result(IntEnum):
     Ok = 0
     ServiceUnavailable = 1
     InvalidVersion = 2
@@ -45,44 +47,44 @@ class Result:
     TransactionAborted = 43
     #DrawingInitFailed = 44
     
-class LogLevel:
+class LogLevel(IntEnum):
     Error = 0
     Warning = 1
     Info = 2
     Debug = 3
     
-class CreateFlags:
+class CreateFlags(IntFlag):
     Default = 0
     NoRequireDiscord = 1
 
-class UserFlag:
+class UserFlag(IntFlag):
     Partner = 2
     HypeSquadEvents = 4
     HypeSquadHouse1 = 64
     HypeSquadHouse2 = 128
     HypeSquadHouse3 = 256
     
-class PremiumType:
+class PremiumType(IntEnum):
     None_ = 0
     Tier1 = 1
     Tier2 = 2
     
-class ActivityType:
+class ActivityType(IntEnum):
     Playing = 0
     Streaming = 1
     Listening = 2
     Custom = 4
     
-class ActivityJoinRequestReply:
+class ActivityJoinRequestReply(IntEnum):
     No = 0
     Yes = 1
     Ignore = 2
     
-class ActivityActionType:
+class ActivityActionType(IntEnum):
     Join = 1
     Spectate = 2
     
-class RelationshipType:
+class RelationshipType(IntEnum):
     None_ = 0
     Friend = 1
     Blocked = 2
@@ -90,20 +92,20 @@ class RelationshipType:
     PendingOutgoing = 4
     Implicit = 5
     
-class Status:
+class Status(IntEnum):
     Offline = 0
     Online = 1
     Idle = 2
     DoNotDisturb = 4
     
-class ImageType:
+class ImageType(IntEnum):
     User = 0
     
-class LobbyType:
+class LobbyType(IntEnum):
     Private = 1
     Public = 2
     
-class LobbySearchComparison:
+class LobbySearchComparison(IntEnum):
     LessThanOrEqual = -2
     LessThan = -1
     Equal = 0
@@ -111,27 +113,27 @@ class LobbySearchComparison:
     GreaterThanOrEqual = 2
     NotEqual = 3
     
-class LobbySearchCast:
+class LobbySearchCast(IntEnum):
     String = 1
     Number = 2
     
-class LobbySearchDistance:
+class LobbySearchDistance(IntEnum):
     Local = 0
     Default = 1
     Extended = 2
     Global = 3
     
-class InputModeType:
+class InputModeType(IntEnum):
     VoiceActivity = 0
     PushToTalk = 1
     
-class SkuType:
+class SkuType(IntEnum):
     Application = 1
     DLC = 2
     Consumable = 3
     Bundle = 4
     
-class EntitlementType:
+class EntitlementType(IntEnum):
     Purchase = 1
     PremiumSubscription = 2
     DeveloperGift = 3

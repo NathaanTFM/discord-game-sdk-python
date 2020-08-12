@@ -42,7 +42,7 @@ class ActivityManager:
         result = self._internal.register_steam(self._internal, steamId)
         return result
         
-    def UpdateActivity(self, activity: Activity, callback: Callable) -> None:
+    def UpdateActivity(self, activity: Activity, callback: Callable[[Result], None]) -> None:
         """
         Set a user's presence in Discord to a new activity.
         
@@ -57,7 +57,7 @@ class ActivityManager:
         
         self._internal.update_activity(self._internal, activity._internal, ctypes.c_void_p(), CCallback)
         
-    def ClearActivity(self, callback: Callable) -> None:
+    def ClearActivity(self, callback: Callable[[Result], None]) -> None:
         """
         Clears a user's presence in Discord to make it show nothing.
         
@@ -72,7 +72,7 @@ class ActivityManager:
         
         self._internal.clear_activity(self._internal, ctypes.c_void_p(), CCallback)
         
-    def SendRequestReply(self, userId: int, reply: ActivityJoinRequestReply, callback: Callable) -> None:
+    def SendRequestReply(self, userId: int, reply: ActivityJoinRequestReply, callback: Callable[[Result], None]) -> None:
         """
         Sends a reply to an Ask to Join request.
         
@@ -87,7 +87,7 @@ class ActivityManager:
         
         self._internal.send_request_reply(self._internal, userId, reply, ctypes.c_void_p(), CCallback)
         
-    def SendInvite(self, userId: int, type: ActivityActionType, content: str, callback: Callable) -> None:
+    def SendInvite(self, userId: int, type: ActivityActionType, content: str, callback: Callable[[Result], None]) -> None:
         """
         Sends a game invite to a given user.
         
@@ -102,7 +102,7 @@ class ActivityManager:
         
         self._internal.send_invite(self._internal, userId, type, content.encode("utf8"), ctypes.c_void_p(), CCallback)
         
-    def AcceptInvite(self, userId: int, callback: Callable) -> None:
+    def AcceptInvite(self, userId: int, callback: Callable[[Result], None]) -> None:
         """
         Accepts a game invitation from a given userId.
         

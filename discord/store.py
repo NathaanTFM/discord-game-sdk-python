@@ -29,6 +29,7 @@ class StoreManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.fetch_skus.argtypes[-1](CCallback)
@@ -50,7 +51,7 @@ class StoreManager:
         """
         sku = sdk.DiscordSku()
         
-        result = self._internal.get_sku(skuId, sku)
+        result = Result(self._internal.get_sku(skuId, sku))
         if result != Result.Ok:
             raise getException(result)
             
@@ -62,7 +63,7 @@ class StoreManager:
         """
         sku = sdk.DiscordSku()
         
-        result = self._internal.get_sku_at(index, sku)
+        result = Result(self._internal.get_sku_at(index, sku))
         if result != Result.Ok:
             raise getException(result)
             
@@ -76,6 +77,7 @@ class StoreManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.fetch_entitlements.argtypes[-1](CCallback)
@@ -97,7 +99,7 @@ class StoreManager:
         """
         entitlement = sdk.DiscordEntitlement()
         
-        result = self._internal.get_entitlement(entitlementId, entitlement)
+        result = Result(self._internal.get_entitlement(entitlementId, entitlement))
         if result != Result.Ok:
             raise getException(result)
             
@@ -109,7 +111,7 @@ class StoreManager:
         """
         entitlement = sdk.DiscordEntitlement()
         
-        result = self._internal.get_entitlement_at(index, entitlement)
+        result = Result(self._internal.get_entitlement_at(index, entitlement))
         if result != Result.Ok:
             raise getException(result)
             
@@ -121,7 +123,7 @@ class StoreManager:
         """
         has_entitlement = ctypes.c_bool()
         
-        result = self._internal.has_sku_entitlement(skuId, has_entitlement)
+        result = Result(self._internal.has_sku_entitlement(skuId, has_entitlement))
         if result != Result.Ok:
             raise getException(result)
             
@@ -135,6 +137,7 @@ class StoreManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.start_purchase.argtypes[-1](CCallback)
