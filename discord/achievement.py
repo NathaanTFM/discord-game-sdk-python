@@ -25,6 +25,7 @@ class AchievementManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.set_user_achievement.argtypes[-1](CCallback)
@@ -40,6 +41,7 @@ class AchievementManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.fetch_user_achievements.argtypes[-1](CCallback)
@@ -60,7 +62,7 @@ class AchievementManager:
         Gets the user's achievement at a given index of their list of achievements.
         """
         achievement = sdk.DiscordUserAchievement()
-        result = self._internal.get_user_achievement_at(self._internal, index, achievement)
+        result = Result(self._internal.get_user_achievement_at(self._internal, index, achievement))
         if result != Result.Ok:
             raise getException(result)
             
@@ -71,7 +73,7 @@ class AchievementManager:
         Gets the user achievement for the given achievement id. 
         """
         achievement = sdk.DiscordUserAchievement()
-        result = self._internal.get_user_achievement(self._internal, achievementId, achievement)
+        result = Result(self._internal.get_user_achievement(self._internal, achievementId, achievement))
         if result != Result.Ok:
             raise getException(result)
             
