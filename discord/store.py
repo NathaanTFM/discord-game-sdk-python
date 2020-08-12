@@ -10,7 +10,10 @@ class StoreManager:
     def __init__(self):
         self._internal = None
         self._garbage = []
-        self._events = None
+        self._events = bindEvents(sdk.IDiscordStoreEvents,
+            self._OnEntitlementCreate,
+            self._OnEntitlementDelete
+        )
         
     def _OnEntitlementCreate(self, event_data, entitlement):
         self.OnEntitlementCreate(Entitlement(copy = entitlement))
