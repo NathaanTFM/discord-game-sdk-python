@@ -94,7 +94,7 @@ class Status:
     Offline = 0
     Online = 1
     Idle = 2
-    DoNotDisturb = 4
+    DoNotDisturb = 3
     
 class ImageType:
     User = 0
