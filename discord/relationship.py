@@ -1,6 +1,6 @@
 from . import sdk
-from .model import User, Relationship
-from .enum import Result, RelationshipType, Status
+from .model import Relationship
+from .enum import Result
 from .event import bindEvents
 from .exception import getException
 from typing import Callable
@@ -21,7 +21,7 @@ class RelationshipManager:
     def _OnRelationshipUpdate(self, event_data, relationship):
         self.OnRelationshipUpdate(Relationship(copy = relationship.contents))
         
-    def Filter(self, filter: Callable) -> None:
+    def Filter(self, filter: Callable[[Relationship], None]) -> None:
         """
         Filters a user's relationship list by a boolean condition.
         """
@@ -37,7 +37,7 @@ class RelationshipManager:
         Get the relationship between the current user and a given user by id.
         """
         pointer = sdk.DiscordRelationship()
-        result = self._internal.get(self._internal, userId, pointer)
+        result = Result(self._internal.get(self._internal, userId, pointer))
         if result != Result.Ok:
             raise getException(result)
             
@@ -48,7 +48,7 @@ class RelationshipManager:
         Get the relationship at a given index when iterating over a list of relationships.
         """
         pointer = sdk.DiscordRelationship()
-        result = self._internal.get_at(self._internal, index, pointer)
+        result = Result(self._internal.get_at(self._internal, index, pointer))
         if result != Result.Ok:
             raise getException(result)
             
@@ -59,7 +59,7 @@ class RelationshipManager:
         Get the number of relationships that match your filter.
         """
         count = ctypes.c_int32()
-        result = self._internal.count(self._internal, count)
+        result = Result(self._internal.count(self._internal, count))
         if result != Result.Ok:
             raise getException(result)
         

@@ -2,7 +2,7 @@ from . import sdk
 from .enum import Result
 from .exception import getException
 from .model import FileStat
-from typing import Callable
+from typing import Callable, Optional
 import ctypes
 
 class StorageManager:
@@ -17,7 +17,7 @@ class StorageManager:
         """
         path = sdk.DiscordPath()
         
-        result = self._internal.get_path(self._internal, path)
+        result = Result(self._internal.get_path(self._internal, path))
         if result != Result.Ok:
             raise getException(result)
             
@@ -35,7 +35,7 @@ class StorageManager:
         buffer = (ctypes.c_uint8 * fileSize)()
         read = ctypes.c_uint32()
         
-        result = self._internal.read(self._internal, name, buffer, len(buffer), read)
+        result = Result(self._internal.read(self._internal, name, buffer, len(buffer), read))
         if result != Result.Ok:
             raise getException(result)
             
@@ -44,7 +44,7 @@ class StorageManager:
             
         return bytes(buffer[:read.value])
             
-    def ReadAsync(self, name: str, callback: Callable) -> None:
+    def ReadAsync(self, name: str, callback: Callable[[Result, Optional[bytes]], None]) -> None:
         """
         Reads data asynchronously from the game's allocated save file.
         
@@ -52,7 +52,8 @@ class StorageManager:
         """
         def CCallback(callback_data, result, data, data_length):
             self._garbage.remove(CCallback)
-            if data:
+            result = Result(result)
+            if result == Result.Ok:
                 data = bytes(data[:data_length])
                 callback(result, data)
             else:
@@ -64,13 +65,14 @@ class StorageManager:
         name = ctypes.c_char_p(name.encode("utf8"))
         self._internal.read_async(self._internal, name, ctypes.c_void_p(), CCallback)
         
-    def ReadAsyncPartial(self, name: str, offset: int, length: int, callback: Callable) -> None:
+    def ReadAsyncPartial(self, name: str, offset: int, length: int, callback: Callable[[Result], None]) -> None:
         """
         Reads data asynchronously from the game's allocated save file, starting at a given offset and up to a given length.
         """
         def CCallback(callback_data, result, data, data_length):
             self._garbage.remove(CCallback)
-            if data:
+            result = Result(result)
+            if result == Result.Ok:
                 data = bytes(data[:data_length])
                 callback(result, data)
             else:
@@ -89,16 +91,17 @@ class StorageManager:
         name = ctypes.c_char_p(name.encode("utf8"))
         data = (ctypes.c_uint8 * len(data))(*data)
         
-        result = self._internal.write(self._internal, name, data, len(data))
+        result = Result(self._internal.write(self._internal, name, data, len(data)))
         if result != Result.Ok:
             raise getException(result)
         
-    def WriteAsync(self, name: str, data: bytes, callback: Callable) -> None:
+    def WriteAsync(self, name: str, data: bytes, callback: Callable[[Result], None]) -> None:
         """
         Writes data asynchronously to disk under the given keyname.
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.write_async.argtypes[-1](CCallback)
@@ -115,7 +118,7 @@ class StorageManager:
         """
         name = ctypes.c_char_p(name.encode("utf8"))
         
-        result = self._internal.delete_(self._internal, name)
+        result = Result(self._internal.delete_(self._internal, name))
         if result != Result.Ok:
             raise getException(result)
     
@@ -126,7 +129,7 @@ class StorageManager:
         exists = ctypes.c_bool()
         name = ctypes.c_char_p(name.encode("utf8"))
         
-        result = self._internal.exists(self._internal, name, exists)
+        result = Result(self._internal.exists(self._internal, name, exists))
         if result != Result.Ok:
             raise getException(result)
             
@@ -139,7 +142,7 @@ class StorageManager:
         stat = sdk.DiscordFileStat()
         
         name = ctypes.c_char_p(name.encode("utf8"))
-        result = self._internal.stat(self._internal, name, stat)
+        result = Result(self._internal.stat(self._internal, name, stat))
         if result != Result.Ok:
             raise getException(result)
             
@@ -159,7 +162,7 @@ class StorageManager:
         """
         stat = sdk.DiscordFileStat()
         
-        result = self._internal.stat_at(self._internal, index, stat)
+        result = Result(self._internal.stat_at(self._internal, index, stat))
         if result != Result.Ok:
             raise getException(result)
         

@@ -22,7 +22,7 @@ class UserManager:
         Fetch information about the currently connected user account.
         """
         user = sdk.DiscordUser()
-        result = self._internal.get_current_user(self._internal, user)
+        result = Result(self._internal.get_current_user(self._internal, user))
         if result != Result.Ok:
             raise getException(result)
             
@@ -36,6 +36,7 @@ class UserManager:
         """
         def CCallback(callback_data, result, user):
             self._garbage.remove(CCallback)
+            result = Result(result)
             if result == Result.Ok:
                 callback(result, User(copy = user.contents))
             else:
@@ -51,18 +52,18 @@ class UserManager:
         Get the PremiumType for the currently connected user.
         """
         premiumType = ctypes.c_int32()
-        result = self._internal.get_current_user_premium_type(self._internal, premiumType)
+        result = Result(self._internal.get_current_user_premium_type(self._internal, premiumType))
         if result != Result.Ok:
             raise getException(result)
             
-        return premiumType.value
+        return PremiumType(premiumType.value)
         
     def CurrentUserHasFlag(self, flag: UserFlag) -> bool:
         """
         See whether or not the current user has a certain UserFlag on their account.
         """
         hasFlag = ctypes.c_bool()
-        result = self._internal.current_user_has_flag(self._internal, flag, hasFlag)
+        result = Result(self._internal.current_user_has_flag(self._internal, flag, hasFlag))
         if result != Result.Ok:
             raise getException(result)
             

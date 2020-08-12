@@ -6,13 +6,11 @@ class DiscordException(Exception):
 exceptions = {}
     
 # we dynamically create the exceptions
-for name in dir(Result):
-    value = getattr(Result, name)
-    if not name.startswith("_") and name != "Ok":
-        exception = type(name, (DiscordException,), {})
-        
-        globals()[name] = exception
-        exceptions[value] = exception
+for res in Result:
+    exception = type(res.name, (DiscordException,), {})
+    
+    globals()[res.name] = exception
+    exceptions[res] = exception
         
 def getException(result):
-    return exceptions.get(result, DiscordException)("result " + str(result))
+    return exceptions.get(result, DiscordException)("result " + str(result.value))

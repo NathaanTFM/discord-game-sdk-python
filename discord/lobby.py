@@ -3,7 +3,7 @@ from .model import Lobby, User
 from .enum import Result, LobbyType, LobbySearchComparison, LobbySearchCast, LobbySearchDistance
 from .event import bindEvents
 from .exception import getException
-from typing import Callable
+from typing import Callable, Optional
 import ctypes
 
 class LobbyTransaction:
@@ -14,7 +14,7 @@ class LobbyTransaction:
         """
         Marks a lobby as private or public.
         """
-        result = self._internal.set_type(self._internal, type)
+        result = Result(self._internal.set_type(self._internal, type))
         if result != Result.Ok:
             raise getException(result)
             
@@ -22,7 +22,7 @@ class LobbyTransaction:
         """
         Sets a new owner for the lobby.
         """
-        result = self._internal.set_owner(self._internal, userId)
+        result = Result(self._internal.set_owner(self._internal, userId))
         if result != Result.Ok:
             raise getException(result)
         
@@ -30,7 +30,7 @@ class LobbyTransaction:
         """
         Sets a new capacity for the lobby.
         """
-        result = self._internal.set_capacity(self._internal, capacity)
+        result = Result(self._internal.set_capacity(self._internal, capacity))
         if result != Result.Ok:
             raise getException(result)
         
@@ -44,7 +44,7 @@ class LobbyTransaction:
         metadataValue = sdk.DiscordMetadataValue()
         metadataValue.value = value.encode("utf8")
         
-        result = self._internal.set_metadata(self._internal, metadataKey, metadataValue)
+        result = Result(self._internal.set_metadata(self._internal, metadataKey, metadataValue))
         if result != Result.Ok:
             raise getException(result)
     
@@ -55,7 +55,7 @@ class LobbyTransaction:
         metadataKey = sdk.DiscordMetadataKey()
         metadataKey.value = key.encode("utf8")
             
-        result = self._internal.delete_metadata(self._internal, metadataKey)
+        result = Result(self._internal.delete_metadata(self._internal, metadataKey))
         if result != Result.Ok:
             raise getException(result)
     
@@ -63,7 +63,7 @@ class LobbyTransaction:
         """
         Sets the lobby to locked or unlocked.
         """
-        result = self._internal.set_locked(self._internal, locked)
+        result = Result(self._internal.set_locked(self._internal, locked))
         if result != Result.Ok:
             raise getException(result)
     
@@ -81,7 +81,7 @@ class LobbyMemberTransaction:
         metadataValue = sdk.DiscordMetadataValue()
         metadataValue.value = value.encode("utf8")
         
-        result = self._internal.set_metadata(self._internal, metadataKey, metadataValue)
+        result = Result(self._internal.set_metadata(self._internal, metadataKey, metadataValue))
         if result != Result.Ok:
             raise getException(result)
     
@@ -92,7 +92,7 @@ class LobbyMemberTransaction:
         metadataKey = sdk.DiscordMetadataKey()
         metadataKey.value = key.encode("utf8")
         
-        result = self._internal.delete_metadata(self._internal, metadataKey)
+        result = Result(self._internal.delete_metadata(self._internal, metadataKey))
         if result != Result.Ok:
             raise getException(result)
     
@@ -110,7 +110,7 @@ class LobbySearchQuery:
         metadataValue = sdk.DiscordMetadataValue()
         metadataValue.value = value.encode("utf8")
         
-        result = self._internal.filter(self._internal, metadataKey, comp, cast, metadataValue)
+        result = Result(self._internal.filter(self._internal, metadataKey, comp, cast, metadataValue))
         if result != Result.Ok:
             raise getException(result)
     
@@ -124,7 +124,7 @@ class LobbySearchQuery:
         metadataValue = sdk.DiscordMetadataValue()
         metadataValue.value = value.encode("utf8")
         
-        result = self._internal.sort(self._internal, metadataKey, cast, metadataValue)
+        result = Result(self._internal.sort(self._internal, metadataKey, cast, metadataValue))
         if result != Result.Ok:
             raise getException(result)
     
@@ -132,15 +132,15 @@ class LobbySearchQuery:
         """
         Limits the number of lobbies returned in a search.
         """
-        result = self._internal.limit(self._internal, limit)
+        result = Result(self._internal.limit(self._internal, limit))
         if result != Result.Ok:
             raise getException(result)
     
-    def Distance(self, distance: int) -> None:
+    def Distance(self, distance: LobbySearchDistance) -> None:
         """
         Filters lobby results to within certain regions relative to the user's location.
         """
-        result = self._internal.distance(self._internal, distance)
+        result = Result(self._internal.distance(self._internal, distance))
         if result != Result.Ok:
             raise getException(result)
     
@@ -190,7 +190,7 @@ class LobbyManager:
         Gets a Lobby transaction used for creating a new lobby
         """
         transaction = ctypes.POINTER(sdk.IDiscordLobbyTransaction)()
-        result = self._internal.get_lobby_create_transaction(self._internal, transaction)
+        result = Result(self._internal.get_lobby_create_transaction(self._internal, transaction))
         if result != Result.Ok:
             raise getException(result)
             
@@ -201,7 +201,7 @@ class LobbyManager:
         Gets a lobby transaction used for updating an existing lobby.
         """
         transaction = ctypes.POINTER(sdk.IDiscordLobbyTransaction)()
-        result = self._internal.get_lobby_update_transaction(self._internal, lobbyId, transaction)
+        result = Result(self._internal.get_lobby_update_transaction(self._internal, lobbyId, transaction))
         if result != Result.Ok:
             raise getException(result)
             
@@ -212,13 +212,13 @@ class LobbyManager:
         Gets a new member transaction for a lobby member in a given lobby.
         """
         transaction = ctypes.POINTER(sdk.IDiscordLobbyMemberTransaction)()
-        result = self._internal.get_member_update_transaction(self._internal, lobbyId, userId, transaction)
+        result = Result(self._internal.get_member_update_transaction(self._internal, lobbyId, userId, transaction))
         if result != Result.Ok:
             raise getException(result)
             
         return LobbyMemberTransaction(internal = transaction.contents)
         
-    def CreateLobby(self, transaction: LobbyTransaction, callback: Callable) -> None:
+    def CreateLobby(self, transaction: LobbyTransaction, callback: Callable[[Result, Optional[Lobby]], None]) -> None:
         """
         Creates a lobby.
         
@@ -226,6 +226,7 @@ class LobbyManager:
         """
         def CCallback(callback_data, result, lobby):
             self._garbage.remove(CCallback)
+            result = Result(result)
             if result == Result.Ok:
                 callback(result, Lobby(copy = lobby.contents))
             else:
@@ -236,12 +237,13 @@ class LobbyManager:
         
         self._internal.create_lobby(self._internal, transaction._internal, ctypes.c_void_p(), CCallback)
         
-    def UpdateLobby(self, lobbyId: int, transaction: LobbyTransaction, callback: Callable) -> None:
+    def UpdateLobby(self, lobbyId: int, transaction: LobbyTransaction, callback: Callable[[Result], None]) -> None:
         """
         Updates a lobby with data from the given transaction.
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.update_lobby.argtypes[-1](CCallback)
@@ -249,12 +251,13 @@ class LobbyManager:
         
         self._internal.update_lobby(self._internal, lobbyId, transaction._internal, ctypes.c_void_p(), CCallback)
         
-    def DeleteLobby(self, lobbyId: int, callback: Callable) -> None:
+    def DeleteLobby(self, lobbyId: int, callback: Callable[[Result], None]) -> None:
         """
         Deletes a given lobby.
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.delete_lobby.argtypes[-1](CCallback)
@@ -262,12 +265,13 @@ class LobbyManager:
         
         self._internal.delete_lobby(self._internal, lobbyId, ctypes.c_void_p(), CCallback)
         
-    def ConnectLobby(self, lobbyId: int, lobbySecret: str, callback: Callable) -> None:
+    def ConnectLobby(self, lobbyId: int, lobbySecret: str, callback: Callable[[Result], None]) -> None:
         """
         Connects the current user to a given lobby.
         """
         def CCallback(callback_data, result, lobby):
             self._garbage.remove(CCallback)
+            result = Result(result)
             if result == Result.Ok:
                 callback(result, Lobby(copy = lobby.contents))
             else:
@@ -281,12 +285,13 @@ class LobbyManager:
         
         self._internal.connect_lobby(self._internal, lobbyId, _lobbySecret, ctypes.c_void_p(), CCallback)
         
-    def ConnectLobbyWithActivitySecret(self, activitySecret: str, callback: Callable) -> None:
+    def ConnectLobbyWithActivitySecret(self, activitySecret: str, callback: Callable[[Result, Optional[Lobby]], None]) -> None:
         """
         Connects the current user to a lobby; requires the special activity secret from the lobby which is a concatenated lobbyId and secret.
         """
         def CCallback(callback_data, result, lobby):
             self._garbage.remove(CCallback)
+            result = Result(result)
             if result == Result.Ok:
                 callback(result, Lobby(copy = lobby.contents))
             else:
@@ -312,7 +317,7 @@ class LobbyManager:
             
         return lobbySecret.value.decode("utf8")
         
-    def DisconnectLobby(self, lobbyId: int, callback: Callable) -> None:
+    def DisconnectLobby(self, lobbyId: int, callback: Callable[[Result], None]) -> None:
         """
         Disconnects the current user from a lobby.
         
@@ -320,6 +325,7 @@ class LobbyManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.disconnect_lobby.argtypes[-1](CCallback)
@@ -333,7 +339,7 @@ class LobbyManager:
         """
         lobby = sdk.DiscordLobby()
         
-        result = self._internal.get_lobby(self._internal, lobbyId, lobby)
+        result = Result(self._internal.get_lobby(self._internal, lobbyId, lobby))
         if result != Result.Ok:
             raise getException(result)
             
@@ -345,7 +351,7 @@ class LobbyManager:
         """
         count = sdk.c_int32()
         
-        result = self._internal.lobby_metadata_count(self._internal, lobbyId, count)
+        result = Result(self._internal.lobby_metadata_count(self._internal, lobbyId, count))
         if result != Result.Ok:
             raise getException(result)
             
@@ -357,7 +363,7 @@ class LobbyManager:
         """
         metadataKey = sdk.DiscordMetadataKey()
         
-        result = self._internal.get_lobby_metadata_key(self._internal, lobbyId, index, metadataKey)
+        result = Result(self._internal.get_lobby_metadata_key(self._internal, lobbyId, index, metadataKey))
         if result != Result.Ok:
             raise getException(result)
             
@@ -372,7 +378,7 @@ class LobbyManager:
         
         metadataValue = sdk.DiscordMetadataValue()
         
-        result = self._internal.get_lobby_metadata_value(self._internal, lobbyId, metadataKey, metadataValue)
+        result = Result(self._internal.get_lobby_metadata_value(self._internal, lobbyId, metadataKey, metadataValue))
         if result != Result.Ok:
             raise getException(result)
             
@@ -384,7 +390,7 @@ class LobbyManager:
         """
         count = sdk.c_int32()
         
-        result = self._internal.member_count(self._internal, lobbyId, count)
+        result = Result(self._internal.member_count(self._internal, lobbyId, count))
         if result != Result.Ok:
             raise getException(result)
             
@@ -396,7 +402,7 @@ class LobbyManager:
         """
         userId = sdk.DiscordUserId()
         
-        result = self._internal.get_member_user_id(self._internal, lobbyId, index, userId)
+        result = Result(self._internal.get_member_user_id(self._internal, lobbyId, index, userId))
         if result != Result.Ok:
             raise getException(result)
             
@@ -408,7 +414,7 @@ class LobbyManager:
         """
         user = sdk.DiscordUser()
         
-        result = self._internal.get_member_user(self._internal, lobbyId, userId, user)
+        result = Result(self._internal.get_member_user(self._internal, lobbyId, userId, user))
         if result != Result.Ok:
             raise getException(result)
             
@@ -420,7 +426,7 @@ class LobbyManager:
         """
         count = sdk.c_int32()
         
-        result = self._internal.member_metadata_count(self._internal, lobbyId, userId, count)
+        result = Result(self._internal.member_metadata_count(self._internal, lobbyId, userId, count))
         if result != Result.Ok:
             raise getException(result)
             
@@ -432,7 +438,7 @@ class LobbyManager:
         """
         metadataKey = sdk.DiscordMetadataKey()
         
-        result = self._internal.get_member_metadata_key(self._internal, lobbyId, userId, index, metadataKey)
+        result = Result(self._internal.get_member_metadata_key(self._internal, lobbyId, userId, index, metadataKey))
         if result != Result.Ok:
             raise getException(result)
             
@@ -447,13 +453,13 @@ class LobbyManager:
         
         metadataValue = sdk.DiscordMetadataValue()
         
-        result = self._internal.get_member_metadata_value(self._internal, lobbyId, userId, metadataKey, metadataValue)
+        result = Result(self._internal.get_member_metadata_value(self._internal, lobbyId, userId, metadataKey, metadataValue))
         if result != Result.Ok:
             raise getException(result)
             
         return metadataValue.value.decode("utf8")
         
-    def UpdateMember(self, lobbyId: int, userId: int, transaction: LobbyMemberTransaction, callback: Callable) -> None:
+    def UpdateMember(self, lobbyId: int, userId: int, transaction: LobbyMemberTransaction, callback: Callable[[Result], None]) -> None:
         """
         Updates lobby member info for a given member of the lobby.
         
@@ -461,6 +467,7 @@ class LobbyManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.update_member.argtypes[-1](CCallback)
@@ -468,7 +475,7 @@ class LobbyManager:
         
         self._internal.update_member(self._internal, lobbyId, userId, transaction._internal, ctypes.c_void_p(), CCallback)
         
-    def SendLobbyMessage(self, lobbyId: int, data: str, callback: Callable) -> None:
+    def SendLobbyMessage(self, lobbyId: int, data: str, callback: Callable[[Result], None]) -> None:
         """
         Sends a message to the lobby on behalf of the current user.
         
@@ -476,6 +483,7 @@ class LobbyManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.send_lobby_message.argtypes[-1](CCallback)
@@ -490,13 +498,13 @@ class LobbyManager:
         Creates a search object to search available lobbies.
         """
         search_query = (ctypes.POINTER(sdk.IDiscordLobbySearchQuery))()
-        result = self._internal.get_search_query(self._internal, ctypes.byref(search_query))
+        result = Result(self._internal.get_search_query(self._internal, ctypes.byref(search_query)))
         if result != Result.Ok:
             raise getException(result)
             
         return LobbySearchQuery(internal = search_query.contents)
         
-    def Search(self, search: LobbySearchQuery, callback: Callable) -> None:
+    def Search(self, search: LobbySearchQuery, callback: Callable[[Result], None]) -> None:
         """
         Searches available lobbies based on the search criteria chosen in the LobbySearchQuery member functions.
         
@@ -506,6 +514,7 @@ class LobbyManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.search.argtypes[-1](CCallback)
@@ -528,13 +537,13 @@ class LobbyManager:
         
         lobbyId = sdk.DiscordLobbyId()
         
-        result = self._internal.get_lobby_id(self._internal, index, lobbyId)
+        result = Result(self._internal.get_lobby_id(self._internal, index, lobbyId))
         if result != Result.Ok:
             raise getException(result)
             
         return lobbyId.value
         
-    def ConnectVoice(self, lobbyId: int, callback: Callable) -> None:
+    def ConnectVoice(self, lobbyId: int, callback: Callable[[Result], None]) -> None:
         """
         Connects to the voice channel of the current lobby.
         
@@ -542,6 +551,7 @@ class LobbyManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.connect_voice.argtypes[-1](CCallback)
@@ -549,7 +559,7 @@ class LobbyManager:
         
         self._internal.connect_voice(self._internal, lobbyId, ctypes.c_void_p(), CCallback)
         
-    def DisconnectVoice(self, lobbyId: int, callback: Callable) -> None:
+    def DisconnectVoice(self, lobbyId: int, callback: Callable[[Result], None]) -> None:
         """
         Disconnects from the voice channel of a given lobby.
         
@@ -557,6 +567,7 @@ class LobbyManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.disconnect_voice.argtypes[-1](CCallback)
@@ -610,7 +621,7 @@ class LobbyManager:
         """
         Connects to the networking layer for the given lobby ID.
         """
-        result = self._internal.connect_network(self._internal, lobbyId)
+        result = Result(self._internal.connect_network(self._internal, lobbyId))
         if result != Result.Ok:
             raise getException(result)
         
@@ -618,7 +629,7 @@ class LobbyManager:
         """
         Disconnects from the networking layer for the given lobby ID.
         """
-        result = self._internal.disconnect_network(self._internal, lobbyId)
+        result = Result(self._internal.disconnect_network(self._internal, lobbyId))
         if result != Result.Ok:
             raise getException(result)
             
@@ -626,7 +637,7 @@ class LobbyManager:
         """
         Flushes the network. Call this when you're done sending messages.
         """
-        result = self._internal.flush_network(self._internal)
+        result = Result(self._internal.flush_network(self._internal))
         if result != Result.Ok:
             raise getException(result)
             
@@ -634,7 +645,7 @@ class LobbyManager:
         """
         Opens a network channel to all users in a lobby on the given channel number. No need to iterate over everyone!
         """
-        result = self._internal.open_network_channel(self._internal, lobbyId, channelId, reliable)
+        result = Result(self._internal.open_network_channel(self._internal, lobbyId, channelId, reliable))
         if result != Result.Ok:
             raise getException(result)
             
@@ -643,7 +654,7 @@ class LobbyManager:
         Sends a network message to the given user ID that is a member of the given lobby ID over the given channel ID.
         """
         data = (ctypes.c_uint8 * len(data))(*data)
-        result = self._internal.send_network_message(self._internal, lobbyId, userId, channelId, data, len(data))
+        result = Result(self._internal.send_network_message(self._internal, lobbyId, userId, channelId, data, len(data)))
         if result != Result.Ok:
             raise getException(result)
             

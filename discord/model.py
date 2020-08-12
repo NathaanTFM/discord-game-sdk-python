@@ -1,4 +1,6 @@
 from . import sdk
+from .enum import Status, RelationshipType, ImageType, LobbyType, InputModeType, SkuType, EntitlementType
+from enum import Enum
 import ctypes
 
 class Model:
@@ -28,6 +30,8 @@ class Model:
                 return bool(value)
             elif issubclass(field[1], Model):
                 return getattr(self, "_" + field[0])
+            elif issubclass(field[1], Enum):
+                return field[1](int(value))
             else:
                 raise TypeError(field[1])
                     
@@ -48,6 +52,8 @@ class Model:
             elif issubclass(field[1], Model):
                 setattr(self, "_" + field[0], value)
                 setattr(self._internal, field[0], value._internal)
+            elif issubclass(field[1], Enum):
+                setattr(self._internal, field[0], value.value)
             else:
                 raise TypeError(field[1])
 
@@ -119,14 +125,14 @@ class Activity(Model):
 class Presence(Model):
     _struct_ = sdk.DiscordPresence 
     _fields_ = [
-        ("Status", "status", int),
+        ("Status", "status", Status),
         ("Activity", "activity", Activity)
     ]
     
 class Relationship(Model):
     _struct_ = sdk.DiscordRelationship
     _fields_ = [
-        ("Type", "type", int),
+        ("Type", "type", RelationshipType),
         ("User", "user", User),
         ("Presence", "presence", Presence)
     ]
@@ -142,7 +148,7 @@ class ImageDimensions(Model):
 class ImageHandle(Model):
     _struct_ = sdk.DiscordImageHandle
     _fields_ = [
-        ("Type", "type", int),
+        ("Type", "type", ImageType),
         ("Id", "id", int),
         ("Size", "size", int)
     ]
@@ -159,7 +165,7 @@ class Lobby(Model):
     _struct_ = sdk.DiscordLobby
     _fields_ = [
         ("Id", "id", int),
-        ("Type", "type", int),
+        ("Type", "type", LobbyType),
         ("OwnerId", "owner_id", int),
         ("Secret", "secret", str),
         ("Capacity", "capacity", int),
@@ -169,7 +175,7 @@ class Lobby(Model):
 class InputMode(Model):
     _struct_ = sdk.DiscordInputMode
     _fields_ = [
-        ("Type", "type", int),
+        ("Type", "type", InputModeType),
         ("Shortcut", "shortcut", str)
     ]
     
@@ -201,7 +207,7 @@ class Sku(Model):
     _struct_ = sdk.DiscordSku
     _fields_ = [
         ("Id", "id", int),
-        ("Type", "type", int),
+        ("Type", "type", SkuType),
         ("Name", "name", str),
         ("Price", "price", SkuPrice)
     ]
@@ -210,6 +216,6 @@ class Entitlement(Model):
     _struct_ = sdk.DiscordEntitlement
     _fields_ = [
         ("Id", "id", int),
-        ("Type", "type", int),
+        ("Type", "type", EntitlementType),
         ("SkuId", "sku_id", int)
     ]

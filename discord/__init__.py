@@ -57,7 +57,7 @@ class Discord:
         
         pointer = ctypes.POINTER(sdk.IDiscordCore)()
         
-        result = sdk.DiscordCreate(version, params, ctypes.pointer(pointer))
+        result = Result(sdk.DiscordCreate(version, params, ctypes.pointer(pointer)))
         if result != Result.Ok:
             raise getException(result)
         
@@ -68,23 +68,24 @@ class Discord:
             self.core.destroy(self.core)
             self.core = None
         
-    def SetLogHook(self, min_level: LogLevel, hook: Callable) -> None:
+    def SetLogHook(self, min_level: LogLevel, hook: Callable[[LogLevel, str], None]) -> None:
         """
         Registers a logging callback function with the minimum level of message to receive.
         """
         def CHook(hook_data, level, message):
+            level = LogLevel(level)
             hook(level, message.decode("utf8"))
             
         CHook = self.core.set_log_hook.argtypes[-1](CHook)
         self._garbage.append(CHook)
         
-        self.core.set_log_hook(self.core, min_level, ctypes.c_void_p(), CHook)
+        self.core.set_log_hook(self.core, min_level.value, ctypes.c_void_p(), CHook)
         
     def RunCallbacks(self) -> None:
         """
         Runs all pending SDK callbacks.
         """
-        result = self.core.run_callbacks(self.core)
+        result = Result(self.core.run_callbacks(self.core))
         if result != Result.Ok:
             raise getException(result)
             

@@ -1,8 +1,8 @@
+from . import sdk
 from .enum import Result
 from .model import UserAchievement
 from .event import bindEvents
 from .exception import getException
-from . import sdk
 from typing import Callable
 import ctypes
 
@@ -17,7 +17,7 @@ class AchievementManager:
     def _OnUserAchievementUpdate(self, event_data, user_achievement):
         self.OnUserAchievementUpdate(UserAchievement(copy = user_achievement.contents))
         
-    def SetUserAchievement(self, achievementId: int, percentComplete: int, callback: Callable) -> None:
+    def SetUserAchievement(self, achievementId: int, percentComplete: int, callback: Callable[[Result], None]) -> None:
         """
         Updates the current user's status for a given achievement.
         
@@ -32,7 +32,7 @@ class AchievementManager:
         
         self._internal.set_user_achievement(self._internal, achievementId, percentComplete, ctypes.c_void_p(), CCallback)
         
-    def FetchUserAchievements(self, callback: Callable) -> None:
+    def FetchUserAchievements(self, callback: Callable[[Result], None]) -> None:
         """
         Loads a stable list of the current user's achievements to iterate over.
         
