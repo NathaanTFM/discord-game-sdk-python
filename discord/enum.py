@@ -125,3 +125,17 @@ class InputModeType:
     VoiceActivity = 0
     PushToTalk = 1
     
+class SkuType:
+    Application = 1
+    DLC = 2
+    Consumable = 3
+    Bundle = 4
+    
+class EntitlementType:
+    Purchase = 1
+    PremiumSubscription = 2
+    DeveloperGift = 3
+    TestModePurchase = 4
+    FreePurchase = 5
+    UserGift = 6
+    PremiumPurchase = 7

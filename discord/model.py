@@ -189,3 +189,27 @@ class UserAchievement(Model):
         ("PercentComplete", "percent_complete", int),
         ("UnlockedAt", "unlocked_at", str)
     ]
+    
+class SkuPrice(Model):
+    _struct_ = sdk.DiscordSkuPrice
+    _fields_ = [
+        ("Amount", "amount", int),
+        ("Currency", "currency", str)
+    ]
+    
+class Sku(Model):
+    _struct_ = sdk.DiscordSku
+    _fields_ = [
+        ("Id", "id", int),
+        ("Type", "type", int),
+        ("Name", "name", str),
+        ("Price", "price", SkuPrice)
+    ]
+    
+class Entitlement(Model):
+    _struct_ = sdk.DiscordEntitlement
+    _fields_ = [
+        ("Id", "id", int),
+        ("Type", "type", int),
+        ("SkuId", "sku_id", int)
+    ]
