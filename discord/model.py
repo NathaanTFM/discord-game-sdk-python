@@ -180,3 +180,12 @@ class FileStat(Model):
         ("Size", "size", int),
         ("LastModified", "last_modified", int)
     ]
+    
+class UserAchievement(Model):
+    _struct_ = sdk.DiscordUserAchievement
+    _fields_ = [
+        ("UserId", "user_id", str),
+        ("AchievementId", "achievement_id", int),
+        ("PercentComplete", "percent_complete", int),
+        ("UnlockedAt", "unlocked_at", str)
+    ]

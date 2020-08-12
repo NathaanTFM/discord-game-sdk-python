@@ -28,12 +28,12 @@ If you need documentation, look at [**the official Game SDK docs**](https://disc
   * **UserManager** 
 
 * Should be working, but need more testing:
+  * **AchievementManager** (not tested at all)
   * **ApplicationManager** (especially the functions `GetTicket` and `ValidateOrExit`)
   * **LobbyManager**
   * **VoiceManager**
 
 * Not implemented, or not working:
-  * **AchievementManager**
   * **OverlayManager**
   * **StoreManager**
 
