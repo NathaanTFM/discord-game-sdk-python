@@ -57,7 +57,7 @@ class Discord:
         
         pointer = ctypes.POINTER(sdk.IDiscordCore)()
         
-        result = Result(sdk.DiscordCreate(version, params, ctypes.pointer(pointer)))
+        result = Result(sdk.DiscordCreate(version, ctypes.pointer(params), ctypes.pointer(pointer)))
         if result != Result.Ok:
             raise getException(result)
         
