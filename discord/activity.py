@@ -32,14 +32,14 @@ class ActivityManager:
         """
         Registers a command by which Discord can launch your game.
         """
-        result = self._internal.register_command(self._internal, command.encode("utf8"))
+        result = Result(self._internal.register_command(self._internal, command.encode("utf8")))
         return result
         
     def RegisterSteam(self, steamId: int) -> Result:
         """
         Registers your game's Steam app id for the protocol `steam://run-game-id/<id>`.
         """
-        result = self._internal.register_steam(self._internal, steamId)
+        result = Result(self._internal.register_steam(self._internal, steamId))
         return result
         
     def UpdateActivity(self, activity: Activity, callback: Callable[[Result], None]) -> None:
@@ -50,6 +50,7 @@ class ActivityManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.update_activity.argtypes[-1](CCallback)
@@ -65,6 +66,7 @@ class ActivityManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.clear_activity.argtypes[-1](CCallback)
@@ -80,6 +82,7 @@ class ActivityManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.send_request_reply.argtypes[-1](CCallback)
@@ -95,6 +98,7 @@ class ActivityManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.send_invite.argtypes[-1](CCallback)
@@ -110,6 +114,7 @@ class ActivityManager:
         """
         def CCallback(callback_data, result):
             self._garbage.remove(CCallback)
+            result = Result(result)
             callback(result)
             
         CCallback = self._internal.accept_invite.argtypes[-1](CCallback)
