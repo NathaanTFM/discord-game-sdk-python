@@ -1,4 +1,9 @@
-from enum import IntEnum, IntFlag
+import sys
+
+if sys.version_info >= (3, 6):
+    from enum import IntEnum, IntFlag
+else:
+    from enum import IntEnum, IntEnum as IntFlag
 
 class Result(IntEnum):
     Ok = 0
