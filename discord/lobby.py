@@ -312,7 +312,7 @@ class LobbyManager:
         lobbySecret = sdk.DiscordLobbySecret()
         
         result = self._internal.get_lobby_activity_secret(self._internal, lobbyId, lobbySecret)
-        if result != result.Ok:
+        if result != Result.Ok:
             raise getException(result)
             
         return lobbySecret.value.decode("utf8")
@@ -349,7 +349,7 @@ class LobbyManager:
         """
         Returns the number of metadata key/value pairs on a given lobby.
         """
-        count = sdk.c_int32()
+        count = ctypes.c_int32()
         
         result = Result(self._internal.lobby_metadata_count(self._internal, lobbyId, count))
         if result != Result.Ok:
@@ -388,7 +388,7 @@ class LobbyManager:
         """
         Get the number of members in a lobby.
         """
-        count = sdk.c_int32()
+        count = ctypes.c_int32()
         
         result = Result(self._internal.member_count(self._internal, lobbyId, count))
         if result != Result.Ok:
@@ -424,7 +424,7 @@ class LobbyManager:
         """
         Gets the number of metadata key/value pairs for the given lobby member.
         """
-        count = sdk.c_int32()
+        count = ctypes.c_int32()
         
         result = Result(self._internal.member_metadata_count(self._internal, lobbyId, userId, count))
         if result != Result.Ok:
@@ -526,7 +526,7 @@ class LobbyManager:
         """
         Get the number of lobbies that match the search.
         """
-        count = sdk.c_int32()
+        count = ctypes.c_int32()
         self._internal.lobby_count(self._internal, count)
         return count.value
         
