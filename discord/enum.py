@@ -50,7 +50,7 @@ class Result(IntEnum):
     InvalidGiftCode = 41
     PurchaseError = 42
     TransactionAborted = 43
-    #DrawingInitFailed = 44
+    DrawingInitFailed = 44
     
 class LogLevel(IntEnum):
     Error = 0
@@ -146,3 +146,22 @@ class EntitlementType(IntEnum):
     FreePurchase = 5
     UserGift = 6
     PremiumPurchase = 7
+    
+class KeyVariant(IntEnum):
+    Normal = 0
+    Right = 1
+    Left = 2
+    
+class MouseButton(IntEnum):
+    Left = 0
+    Middle = 1
+    Right = 2
+    
+class ActivityPartyPrivacy(IntEnum):
+    Private = 0
+    Public = 1
+    
+class ActivitySupportedPlatformFlags(IntFlag):
+    Desktop = 1
+    Android = 2
+    iOS = 4

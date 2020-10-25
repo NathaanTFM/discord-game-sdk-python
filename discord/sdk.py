@@ -1,9 +1,6 @@
 from ctypes import *
 import os.path
 
-dll = CDLL(os.path.abspath("discord_game_sdk"))
-DiscordCreate = dll.DiscordCreate 
-    
 DiscordClientId = c_int64
 DiscordVersion = c_int32
 DiscordSnowflake = c_int64
@@ -72,7 +69,8 @@ class DiscordPartySize(Structure):
 class DiscordActivityParty(Structure):
     _fields_ = [
         ("id", c_char * 128),
-        ("size", DiscordPartySize)
+        ("size", DiscordPartySize),
+        ("privacy", c_int32)
     ]
     
 class DiscordActivitySecrets(Structure):
@@ -93,7 +91,8 @@ class DiscordActivity(Structure):
         ("assets", DiscordActivityAssets),
         ("party", DiscordActivityParty),
         ("secrets", DiscordActivitySecrets),
-        ("instance", c_bool)
+        ("instance", c_bool),
+        ("supported_platforms", c_uint32)
     ]
     
 class DiscordPresence(Structure):
@@ -119,13 +118,11 @@ class DiscordLobby(Structure):
         ("locked", c_bool)
     ]
     
-# SDK VERSION 2.5.7+ STUFF
-"""
 class DiscordImeUnderline(Structure):
     _fields_ = [
-        ("from", c_int32),
+        ("from_", c_int32),
         ("to", c_int32),
-        ("color", c_int32),
+        ("color", c_uint32),
         ("background_color", c_uint32),
         ("thick", c_bool)
     ]
@@ -137,7 +134,6 @@ class DiscordRect(Structure):
         ("right", c_int32),
         ("bottom", c_int32)
     ]
-"""
 
 class DiscordFileStat(Structure):
     _fields_ = [
@@ -371,7 +367,21 @@ IDiscordOverlayManager._fields_ = [
     ("set_locked", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_bool, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
     ("open_activity_invite", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_int32, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
     ("open_guild_invite", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_char_p, c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
-    ("open_voice_settings", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_void_p, CFUNCTYPE(None, c_void_p, c_int32)))
+    ("open_voice_settings", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_void_p, CFUNCTYPE(None, c_void_p, c_int32))),
+    
+    ("init_drawing_dxgi", CFUNCTYPE(c_int32, POINTER(IDiscordOverlayManager), c_void_p, c_bool)),
+    ("on_present", CFUNCTYPE(None, POINTER(IDiscordOverlayManager))),
+    ("forward_message", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_void_p)),
+    ("key_event", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_bool, c_char_p, c_int32)),
+    ("char_event", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_char_p)),
+    ("mouse_button_event", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_uint8, c_int32, c_int32, c_int32, c_int32)),
+    ("mouse_motion_event", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_int32, c_int32)),
+    ("ime_commit_text", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_char_p)),
+    ("ime_set_composition", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_char_p, POINTER(DiscordImeUnderline), c_uint32, c_int32, c_int32)),
+    ("ime_cancel_composition", CFUNCTYPE(None, POINTER(IDiscordOverlayManager))),
+    ("set_ime_composition_range_callback", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_void_p, CFUNCTYPE(None, c_void_p, c_int32, c_int32, POINTER(DiscordRect), c_uint32))),
+    ("set_ime_selection_bounds_callback", CFUNCTYPE(None, POINTER(IDiscordOverlayManager), c_void_p, CFUNCTYPE(None, DiscordRect, DiscordRect, c_bool))),
+    ("is_point_inside_click_zone", CFUNCTYPE(c_bool, POINTER(IDiscordOverlayManager), c_int32, c_int32))
 ]
 
 IDiscordStorageEvents = c_void_p
@@ -515,8 +525,16 @@ def DiscordCreateParamsSetDefault(params):
     params.relationship_version = 1
     params.lobby_version = 1
     params.network_version = 1
-    params.overlay_version = 1
+    params.overlay_version = 2
     params.storage_version = 1
     params.store_version = 1
     params.voice_version = 1
     params.achievement_version = 1
+
+
+
+dll = CDLL(os.path.abspath("discord_game_sdk"))
+DiscordCreate = dll.DiscordCreate 
+DiscordCreate.argtypes = (DiscordVersion, POINTER(DiscordCreateParams), POINTER(POINTER(IDiscordCore)))
+DiscordCreate.restype = c_int32
+

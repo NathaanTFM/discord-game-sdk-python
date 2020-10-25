@@ -1,13 +1,13 @@
 # Discord Game SDK for Python
 
-This is **not** a module. This was made for **Python >= 3.5** and **Discord Game SDK 2.5.6**
+This is **not** a module. This was made for **Python >= 3.5** and **Discord Game SDK 3.2.0**
 
 This is a **Work In Progress:** it might not work as expected or not work at all. This was made for testing purposes.
 
 ## Installation
 
 - Download:
-  - [Discord Game SDK (2.5.6)](https://dl-game-sdk.discordapp.net/2.5.6/discord_game_sdk.zip)
+  - [Discord Game SDK (3.2.0)](https://dl-game-sdk.discordapp.net/3.2.0/discord_game_sdk.zip)
   - [Discord Game SDK for Python](https://github.com/NathaanTFM/discord-game-sdk-python/archive/master.zip)
 
 - Grab the DLL from `discord_game_sdk.zip` in the `lib` directory and put it in your project directory
@@ -31,7 +31,7 @@ If you need documentation, look at [**the official Game SDK docs**](https://disc
   * **AchievementManager** (not tested at all)
   * **ApplicationManager** (especially the functions `GetTicket` and `ValidateOrExit`)
   * **LobbyManager**
-  * **OverlayManager**
+  * **OverlayManager** (especially the new functions)
   * **StoreManager** (not tested at all)
   * **VoiceManager**
 

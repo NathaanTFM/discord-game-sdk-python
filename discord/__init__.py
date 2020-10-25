@@ -35,7 +35,7 @@ class Discord:
         
         self._garbage = []
         
-        version = sdk.DiscordVersion(2)
+        version = sdk.DiscordVersion(3)
         
         params = sdk.DiscordCreateParams()
         params.client_id = clientId
@@ -57,7 +57,7 @@ class Discord:
         
         pointer = ctypes.POINTER(sdk.IDiscordCore)()
         
-        result = Result(sdk.DiscordCreate(version, ctypes.pointer(params), ctypes.pointer(pointer)))
+        result = Result(sdk.DiscordCreate(version, params, pointer))
         if result != Result.Ok:
             raise getException(result)
         

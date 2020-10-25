@@ -1,5 +1,5 @@
 from . import sdk
-from .enum import Status, RelationshipType, ImageType, LobbyType, InputModeType, SkuType, EntitlementType
+from .enum import Status, RelationshipType, ImageType, LobbyType, InputModeType, SkuType, EntitlementType, ActivityPartyPrivacy, ActivitySupportedPlatformFlags
 from enum import Enum
 import ctypes
 
@@ -97,7 +97,8 @@ class ActivityParty(Model):
     _struct_ = sdk.DiscordActivityParty
     _fields_ = [
         ("Id", "id", str),
-        ("Size", "size", PartySize)
+        ("Size", "size", PartySize),
+        ("Privacy", "privacy", ActivityPartyPrivacy)
     ]
         
 class ActivitySecrets(Model):
@@ -119,7 +120,8 @@ class Activity(Model):
         ("Assets", "assets", ActivityAssets),
         ("Party", "party", ActivityParty),
         ("Secrets", "secrets", ActivitySecrets),
-        ("Instance", "instance", bool)
+        ("Instance", "instance", bool),
+        ("SupportedPlatforms", "supported_platforms", ActivitySupportedPlatformFlags)
     ]
     
 class Presence(Model):
@@ -218,4 +220,23 @@ class Entitlement(Model):
         ("Id", "id", int),
         ("Type", "type", EntitlementType),
         ("SkuId", "sku_id", int)
+    ]
+    
+class ImeUnderline(Model):
+    _struct_ = sdk.DiscordImeUnderline
+    _fields_ = [
+        ("From", "from_", int),
+        ("To", "to", int),
+        ("Color", "color", int),
+        ("BackgroundColor", "background_color", int),
+        ("Thick", "thick", bool)
+    ]
+    
+class Rect(Model):
+    _struct_ = sdk.DiscordRect
+    _fields_ = [
+        ("Left", "left", int),
+        ("Top", "top", int),
+        ("Right", "right", int),
+        ("Bottom", "bottom", int)
     ]
