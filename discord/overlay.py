@@ -2,6 +2,7 @@ from . import sdk
 from .model import Rect, ImeUnderline
 from .enum import Result, ActivityActionType, KeyVariant, MouseButton
 from .event import bindEvents
+from .exception import getException
 from typing import Callable
 import ctypes
 
@@ -131,7 +132,7 @@ class OverlayManager:
         
     def ImeSetComposition(self, text: str, underlines: ImeUnderline, from_: int, to: int) -> None:
         text = ctypes.c_char_p(text.encode("utf8"))
-        self._internal.ime_set_composition(self._internal, text, underlines, ctypes.sizeof(underlines), from_, to) # TODO: check sizeof argument
+        self._internal.ime_set_composition(self._internal, text, underlines._internal, ctypes.sizeof(underlines._internal), from_, to) # TODO: check sizeof argument
         
     def ImeCancelComposition(self) -> None:
         self._internal.ime_cancel_composition(self._internal)
