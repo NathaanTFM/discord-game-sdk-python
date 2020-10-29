@@ -1,6 +1,7 @@
 # Discord Game SDK for Python
 
-This is **not** a module. This was made for **Python >= 3.5** and **Discord Game SDK 3.2.0**
+This is **not** a module (for an installable module, check out [LennyPhoenix's fork](https://github.com/LennyPhoenix/py-discord-sdk)).
+This was made for **Python >= 3.5** and **Discord Game SDK 3.2.0**
 
 This is a **Work In Progress:** it might not work as expected or not work at all. This was made for testing purposes.
 
