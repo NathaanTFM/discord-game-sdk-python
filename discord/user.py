@@ -3,7 +3,7 @@ from .model import User
 from .enum import Result, PremiumType, UserFlag
 from .event import bindEvents
 from .exception import getException
-from typing import Callable
+from typing import Callable, Optional
 import ctypes
 
 class UserManager:
@@ -28,7 +28,7 @@ class UserManager:
             
         return User(internal = user)
         
-    def GetUser(self, userId: int, callback: Callable) -> None:
+    def GetUser(self, userId: int, callback: Callable[[Result, Optional[User]], None]) -> None:
         """
         Get user information for a given id.
         
