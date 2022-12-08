@@ -1,3 +1,5 @@
+## NOTE: Most Discord GameSDK features are going deprecated. This repo will get updated if there's any major GameSDK updates
+
 # Discord Game SDK for Python
 
 This is **not** a module (for an installable module, check out [LennyPhoenix's fork](https://github.com/LennyPhoenix/py-discord-sdk)).
